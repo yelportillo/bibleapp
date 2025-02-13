@@ -60,12 +60,13 @@
             audio.play().then(() => {
                 audio.muted = false; // Unmute after play starts
             }).catch(error => {
-                console.log("Autoplay failed, user interaction required.");
+                console.log("Autoplay blocked. User interaction required.");
             });
         });
         
         function playMusic() {
             const audio = document.getElementById("background-music");
+            audio.muted = false;
             audio.play();
         }
         
