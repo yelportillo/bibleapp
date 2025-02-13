@@ -51,8 +51,16 @@
         <source src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/music.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
-
+    
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const audio = document.getElementById("background-music");
+            audio.volume = 1.0;
+            audio.play().catch(error => {
+                console.log("Autoplay failed, user interaction required.");
+            });
+        });
+        
         async function fetchRandomVerse() {
             const response = await fetch("https://bible-api.com/?random=1");
             const data = await response.json();
@@ -68,4 +76,3 @@
     </script>
 </body>
 </html>
-
