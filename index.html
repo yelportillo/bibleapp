@@ -37,25 +37,101 @@
         button:hover {
             background-color: #45a049;
         }
+        /* Menu Styles */
+        .menu {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        .menu-items {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            list-style: none;
+            padding: 10px;
+        }
+        .menu-items li {
+            padding: 10px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .menu-items li:hover {
+            background: #f0f0f0;
+        }
+        .tab {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        #prayer-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .prayer-item {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
-    <div id="container">
-        <h2>Verse of the Day</h2>
-        <p id="date"></p>
-        <p id="verse"></p>
-        <p id="prayer"></p>
-        <img id="image" src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg" alt="Bible Image">
-        <button onclick="generateVerse()">Generate New Verse</button>
+    <!-- Menu Icon -->
+    <div class="menu" onclick="toggleMenu()">☰</div>
+    <ul class="menu-items">
+        <li onclick="switchTab('verseTab')">Verse of the Day</li>
+        <li onclick="switchTab('prayerTab')">Prayer Wall</li>
+    </ul>
+
+    <!-- Verse of the Day Section -->
+    <div id="verseTab" class="tab active">
+        <div id="container">
+            <h2>Verse of the Day</h2>
+            <p id="date"></p>
+            <p id="verse"></p>
+            <p id="prayer"></p>
+            <img id="image" src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg" alt="Bible Image">
+            <button onclick="generateVerse()">Generate New Verse</button>
+        </div>
     </div>
-    
+
+    <!-- Prayer Wall Section -->
+    <div id="prayerTab" class="tab">
+        <div id="container">
+            <h2>Prayer Wall</h2>
+            <input type="text" id="name" placeholder="Your Name (Optional)" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+            <textarea id="prayerInput" placeholder="Write your prayer here..." style="width: 100%; padding: 10px; height: 100px;"></textarea>
+            <button onclick="submitPrayer()">Submit Prayer</button>
+            <div id="prayer-list"></div>
+        </div>
+    </div>
+
     <script>
-    // Function to format today's date
+        function toggleMenu() {
+            const menu = document.querySelector(".menu-items");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+            document.getElementById(tabId).classList.add("active");
+            document.querySelector(".menu-items").style.display = "none";
+        }
+
         function displayDate() {
             const today = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById("date").innerText = today.toLocaleDateString("en-US", options);
         }
+
         const verses = [
             { verse: "John 3:16 - For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", prayer: "Lord, thank You for Your unconditional love. Help me to always trust in Your grace and salvation. Amen." },
             { verse: "Jeremiah 29:11 - For I know the plans I have for you, declares the LORD, plans to prosper you and not to harm you, plans to give you hope and a future.", prayer: "Father, I trust in Your divine plan. Give me patience and faith as I walk in Your purpose. Amen." },
@@ -86,7 +162,37 @@
             document.getElementById("prayer").innerText = verses[randomIndex].prayer;
         }
 
-        // Display today's date and a verse when the page loads
+        function submitPrayer() {
+    const nameInput = document.getElementById("name").value.trim();
+    const prayerInput = document.getElementById("prayerInput").value.trim();
+    
+    if (prayerInput === "") {
+        alert("Please enter a prayer before submitting.");
+        return;
+    }
+
+    const name = nameInput === "" ? "Anonymous" : nameInput;
+    const now = new Date();
+    
+    // Formatting date and time
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+    
+    const datePosted = now.toLocaleDateString("en-US", dateOptions);
+    const timePosted = now.toLocaleTimeString("en-US", timeOptions);
+
+    // Display the prayer
+    const prayerList = document.getElementById("prayer-list");
+    const prayerItem = document.createElement("div");
+    prayerItem.classList.add("prayer-item");
+    prayerItem.innerHTML = `<strong>${name}</strong> <br> ${prayerInput} <br><small>${datePosted} at ${timePosted}</small>`;
+    prayerList.prepend(prayerItem);
+
+    // Clear input fields
+    document.getElementById("name").value = "";
+    document.getElementById("prayerInput").value = "";
+}
+
         displayDate();
         generateVerse();
     </script>
