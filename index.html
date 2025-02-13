@@ -45,9 +45,10 @@
         <p id="verse"></p>
         <img id="image" src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg" alt="Bible Image">
         <button onclick="generateVerse()">Generate New Verse</button>
+        <button onclick="playMusic()">Play Music</button>
     </div>
     
-    <audio id="background-music" autoplay loop>
+    <audio id="background-music" loop>
         <source src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/music.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
@@ -55,11 +56,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const audio = document.getElementById("background-music");
-            audio.volume = 1.0;
-            audio.play().catch(error => {
+            audio.muted = true; // Start muted to allow autoplay
+            audio.play().then(() => {
+                audio.muted = false; // Unmute after play starts
+            }).catch(error => {
                 console.log("Autoplay failed, user interaction required.");
             });
         });
+        
+        function playMusic() {
+            const audio = document.getElementById("background-music");
+            audio.play();
+        }
         
         async function fetchRandomVerse() {
             const response = await fetch("https://bible-api.com/?random=1");
