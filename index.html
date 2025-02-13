@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verse of the Day</title>
+    <title>Verse of the Day & Prayer Wall</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,15 +71,20 @@
             display: block;
         }
         #prayer-list {
-            text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
         }
         .prayer-item {
             background: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 15px;
+            border-radius: 8px;
             margin-top: 10px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
         }
     </style>
 </head>
@@ -163,38 +168,64 @@
         }
 
         function submitPrayer() {
-    const nameInput = document.getElementById("name").value.trim();
-    const prayerInput = document.getElementById("prayerInput").value.trim();
-    
-    if (prayerInput === "") {
-        alert("Please enter a prayer before submitting.");
-        return;
-    }
+            const nameInput = document.getElementById("name").value.trim();
+            const prayerInput = document.getElementById("prayerInput").value.trim();
+            
+            if (prayerInput === "") {
+                alert("Please enter a prayer before submitting.");
+                return;
+            }
 
-    const name = nameInput === "" ? "Anonymous" : nameInput;
-    const now = new Date();
-    
-    // Formatting date and time
-    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-    
-    const datePosted = now.toLocaleDateString("en-US", dateOptions);
-    const timePosted = now.toLocaleTimeString("en-US", timeOptions);
+            const name = nameInput === "" ? "Anonymous" : nameInput;
+            const now = new Date();
 
-    // Display the prayer
-    const prayerList = document.getElementById("prayer-list");
-    const prayerItem = document.createElement("div");
-    prayerItem.classList.add("prayer-item");
-    prayerItem.innerHTML = `<strong>${name}</strong> <br> ${prayerInput} <br><small>${datePosted} at ${timePosted}</small>`;
-    prayerList.prepend(prayerItem);
+            // Formatting date and time
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            
+            const datePosted = now.toLocaleDateString("en-US", dateOptions);
+            const timePosted = now.toLocaleTimeString("en-US", timeOptions);
 
-    // Clear input fields
-    document.getElementById("name").value = "";
-    document.getElementById("prayerInput").value = "";
-}
+            // Create prayer object
+            const prayerEntry = {
+                name: name,
+                prayer: prayerInput,
+                date: datePosted,
+                time: timePosted
+            };
 
-        displayDate();
-        generateVerse();
+            // Save to localStorage
+            let prayers = JSON.parse(localStorage.getItem("prayers")) || [];
+            prayers.unshift(prayerEntry);
+            localStorage.setItem("prayers", JSON.stringify(prayers));
+
+            // Display the prayer
+            displayPrayers();
+
+            // Clear input fields
+            document.getElementById("name").value = "";
+            document.getElementById("prayerInput").value = "";
+        }
+
+        function displayPrayers() {
+            const prayerList = document.getElementById("prayer-list");
+            prayerList.innerHTML = "";
+
+            let prayers = JSON.parse(localStorage.getItem("prayers")) || [];
+
+            prayers.forEach(prayer => {
+                const prayerItem = document.createElement("div");
+                prayerItem.classList.add("prayer-item");
+                prayerItem.innerHTML = `<strong>${prayer.name}</strong> <br> ${prayer.prayer} <br><small>${prayer.date} at ${prayer.time}</small>`;
+                prayerList.appendChild(prayerItem);
+            });
+        }
+
+        window.onload = function() {
+            displayDate();
+            generateVerse();
+            displayPrayers();
+        };
     </script>
 </body>
 </html>
