@@ -42,6 +42,7 @@
 <body>
     <div id="container">
         <h2>Verse of the Day</h2>
+        <p id="date"></p>
         <p id="verse"></p>
         <p id="prayer"></p>
         <img id="image" src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg" alt="Bible Image">
@@ -49,6 +50,12 @@
     </div>
     
     <script>
+    // Function to format today's date
+        function displayDate() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById("date").innerText = today.toLocaleDateString("en-US", options);
+        }
         const verses = [
             { verse: "John 3:16 - For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", prayer: "Lord, thank You for Your unconditional love. Help me to always trust in Your grace and salvation. Amen." },
             { verse: "Jeremiah 29:11 - For I know the plans I have for you, declares the LORD, plans to prosper you and not to harm you, plans to give you hope and a future.", prayer: "Father, I trust in Your divine plan. Give me patience and faith as I walk in Your purpose. Amen." },
@@ -79,7 +86,8 @@
             document.getElementById("prayer").innerText = verses[randomIndex].prayer;
         }
 
-        // Generate a verse and prayer on page load
+        // Display today's date and a verse when the page loads
+        displayDate();
         generateVerse();
     </script>
 </body>
