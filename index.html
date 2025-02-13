@@ -47,19 +47,7 @@
         <button onclick="generateVerse()">Generate New Verse</button>
     </div>
     
-    <audio id="background-music" autoplay loop>
-        <source src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/music.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
-    
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const audio = document.getElementById("background-music");
-            audio.play().catch(error => {
-                console.log("Autoplay blocked. User interaction required.");
-            });
-        });
-        
         async function fetchRandomVerse() {
             const response = await fetch("https://bible-api.com/?random=1");
             const data = await response.json();
@@ -75,3 +63,5 @@
     </script>
 </body>
 </html>
+
+
