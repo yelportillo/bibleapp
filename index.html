@@ -88,22 +88,32 @@
         }
         #prayerTab input,
 #prayerTab textarea {
-    width: 90%;
+    width: 100%;
     max-width: 500px;
     display: block;
     margin: 0 auto 10px auto;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    text-align: left; /* Keeps text aligned properly */
+    text-align: left; /* Ensures text alignment */
+    box-sizing: border-box; /* Prevents overflow issues */
 }
 
-/* Make sure the container takes full width on smaller screens */
+/* Ensures container takes full width in mobile portrait mode */
 #prayerTab #container {
     width: 95%;
     max-width: 600px;
     margin: auto;
     padding: 20px;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 480px) {
+    #prayerTab input,
+    #prayerTab textarea {
+        width: 90%; /* Adjust for small screens */
+        margin: 0 auto;
+    }
 }
     </style>
 </head>
