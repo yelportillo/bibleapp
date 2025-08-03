@@ -1,270 +1,315 @@
-<!-- Created with the assistance of ChatGPT -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bible App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-            background-color: #f4f4f4;
-        }
-        #container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: auto;
-        }
-        img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        /* Menu Styles */
-        .menu {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            cursor: pointer;
-            font-size: 24px;
-        }
-        .menu-items {
-            display: none;
-            position: absolute;
-            top: 40px;
-            right: 20px;
-            background: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            list-style: none;
-            padding: 10px;
-        }
-        .menu-items li {
-            padding: 10px;
-            cursor: pointer;
-            text-align: left;
-        }
-        .menu-items li:hover {
-            background: #f0f0f0;
-        }
-        .tab {
-            display: none;
-        }
-        .active {
-            display: block;
-        }
-        #prayer-list {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .prayer-item {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 90%;
-            max-width: 500px;
-        }
-        #prayerTab input,
-#prayerTab textarea {
-    width: 100%;
-    max-width: 500px;
-    display: block;
-    margin: 0 auto 10px auto;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: left; /* Ensures text alignment */
-    box-sizing: border-box; /* Prevents overflow issues */
-}
-
-/* Ensures container takes full width in mobile portrait mode */
-#prayerTab #container {
-    width: 95%;
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-}
-
-/* Media query for smaller screens */
-@media screen and (max-width: 480px) {
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bible App by Yel Portillo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+      background-color: #f4f4f4;
+    }
+    #container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+      position: relative;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .menu {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      cursor: pointer;
+      font-size: 24px;
+      user-select: none;
+    }
+    .menu-items {
+      display: none;
+      position: absolute;
+      top: 40px;
+      right: 20px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 5px;
+      list-style: none;
+      padding: 10px;
+      width: 150px;
+      z-index: 10;
+    }
+    .menu-items li {
+      padding: 10px;
+      cursor: pointer;
+      text-align: left;
+      user-select: none;
+    }
+    .menu-items li:hover {
+      background: #f0f0f0;
+    }
+    .tab {
+      display: none;
+      margin-top: 30px;
+    }
+    .active {
+      display: block;
+    }
+    #prayer-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .prayer-item {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
+      word-wrap: break-word;
+    }
     #prayerTab input,
     #prayerTab textarea {
-        width: 90%; /* Adjust for small screens */
-        margin: 0 auto;
+      width: 100%;
+      max-width: 500px;
+      display: block;
+      margin: 0 auto 10px auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: left;
+      box-sizing: border-box;
+      font-size: 14px;
     }
-}
-    </style>
+    #prayerTab #container {
+      width: 95%;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    @media screen and (max-width: 480px) {
+      #prayerTab input,
+      #prayerTab textarea {
+        width: 90%;
+        margin: 0 auto;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Menu Icon -->
+  <div id="container">
     <div class="menu" onclick="toggleMenu()">☰</div>
-    <ul class="menu-items">
-        <li onclick="switchTab('verseTab')">Verse of the Day</li>
-        <li onclick="switchTab('prayerTab')">Prayer Wall</li>
+    <ul class="menu-items" id="menu-items">
+      <li onclick="switchTab('verseTab')">Verse of the Day</li>
+      <li onclick="switchTab('prayerTab')">Prayer Wall</li>
     </ul>
 
-    <!-- Verse of the Day Section -->
+    <!-- Verse of the Day -->
     <div id="verseTab" class="tab active">
-        <div id="container">
-            <h2>Verse of the Day</h2>
-            <p id="date"></p>
-            <p id="verse"></p>
-            <p id="prayer"></p>
-            <img id="image" src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg" alt="Bible Image">
-            <button onclick="generateVerse()">Generate New Verse</button>
-        </div>
+      <h2>Verse of the Day</h2>
+      <p id="date"></p>
+      <p id="verse" style="font-weight:bold; font-size: 18px;"></p>
+      <img src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg" alt="Bible Image" />
+      <button onclick="generateVerse()">Generate New Verse</button>
     </div>
 
-    <!-- Prayer Wall Section -->
+    <!-- Prayer Wall -->
     <div id="prayerTab" class="tab">
-        <div id="container">
-            <h2>Prayer Wall</h2>
-            <input type="text" id="name" placeholder="Your Name (Optional)" style="width: 100%; padding: 10px; margin-bottom: 10px;">
-            <textarea id="prayerInput" placeholder="Write your prayer here..." style="width: 100%; padding: 10px; height: 100px;"></textarea>
-            <button onclick="submitPrayer()">Submit Prayer</button>
-            <div id="prayer-list"></div>
-        </div>
+      <h2>Prayer Wall</h2>
+      <input type="text" id="name" placeholder="Your Name (Optional)" />
+      <textarea id="prayerInput" placeholder="Write your prayer here..." rows="5"></textarea>
+      <button id="submitPrayer">Submit Prayer</button>
+      <div id="prayer-list"></div>
     </div>
+  </div>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.querySelector(".menu-items");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+    // REPLACE with your Firebase config:
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFAN4AUuoKtnyqR9I558Pjzznj8Me3io0",
+      authDomain: "bible-app-7d43d.firebaseapp.com",
+      databaseURL: "https://bible-app-7d43d-default-rtdb.firebaseio.com",
+      projectId: "bible-app-7d43d",
+      storageBucket: "bible-app-7d43d.appspot.com",
+      messagingSenderId: "201267074022",
+      appId: "1:201267074022:web:925599a081b283c2bdbc27"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Books and chapters count for random verse generation
+    const booksAndChapters = {
+      Genesis: 50, Exodus: 40, Leviticus: 27, Numbers: 36, Deuteronomy: 34,
+      Joshua: 24, Judges: 21, Ruth: 4, "1 Samuel": 31, "2 Samuel": 24,
+      "1 Kings": 22, "2 Kings": 25, "1 Chronicles": 29, "2 Chronicles": 36,
+      Ezra: 10, Nehemiah: 13, Esther: 10, Job: 42, Psalms: 150, Proverbs: 31,
+      Ecclesiastes: 12, Song: 8, Isaiah: 66, Jeremiah: 52, Lamentations: 5,
+      Ezekiel: 48, Daniel: 12, Hosea: 14, Joel: 3, Amos: 9,
+      Obadiah: 1, Jonah: 4, Micah: 7, Nahum: 3, Habakkuk: 3,
+      Zephaniah: 3, Haggai: 2, Zechariah: 14, Malachi: 4,
+      Matthew: 28, Mark: 16, Luke: 24, John: 21,
+      Acts: 28, Romans: 16, "1 Corinthians": 16, "2 Corinthians": 13,
+      Galatians: 6, Ephesians: 6, Philippians: 4, Colossians: 4,
+      "1 Thessalonians": 5, "2 Thessalonians": 3,
+      "1 Timothy": 6, "2 Timothy": 4, Titus: 3, Philemon: 1,
+      Hebrews: 13, James: 5, "1 Peter": 5, "2 Peter": 3,
+      "1 John": 5, "2 John": 1, "3 John": 1, Jude: 1, Revelation: 22
+    };
+
+    // Toggle menu
+    window.toggleMenu = () => {
+      const menu = document.getElementById("menu-items");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    };
+
+    // Switch between tabs
+    window.switchTab = (tabId) => {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+      document.getElementById("menu-items").style.display = "none";
+    };
+
+    // Show current date
+    window.displayDate = () => {
+      const today = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById("date").innerText = today.toLocaleDateString("en-US", options);
+    };
+
+    // Generate a random verse from the Bible API
+    async function generateRandomVerse() {
+      const books = Object.keys(booksAndChapters);
+      const randomBook = books[Math.floor(Math.random() * books.length)];
+      const maxChapters = booksAndChapters[randomBook];
+      const randomChapter = Math.floor(Math.random() * maxChapters) + 1;
+
+      try {
+        const response = await fetch(`https://bible-api.com/${randomBook} ${randomChapter}`);
+        const data = await response.json();
+
+        if (!data || !data.verses || data.verses.length === 0) {
+          document.getElementById("verse").innerText = "Verse not found, try again.";
+          return;
         }
 
-        function switchTab(tabId) {
-            document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-            document.getElementById(tabId).classList.add("active");
-            document.querySelector(".menu-items").style.display = "none";
-        }
+        const randomVerse = data.verses[Math.floor(Math.random() * data.verses.length)];
+        document.getElementById("verse").innerText = `${randomBook} ${randomChapter}:${randomVerse.verse} - ${randomVerse.text.trim()}`;
+      } catch (error) {
+        document.getElementById("verse").innerText = "Error fetching verse. Please try again.";
+        console.error(error);
+      }
+    }
 
-        function displayDate() {
-            const today = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById("date").innerText = today.toLocaleDateString("en-US", options);
-        }
+    // Button handler
+    window.generateVerse = () => {
+      generateRandomVerse();
+    };
 
-        const verses = [
-    { verse: "John 3:16 - For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", prayer: "Lord, thank You for Your unconditional love. Help me to always trust in Your grace and salvation. Amen." },
-    { verse: "Jeremiah 29:11 - For I know the plans I have for you, declares the LORD, plans to prosper you and not to harm you, plans to give you hope and a future.", prayer: "Father, I trust in Your divine plan. Give me patience and faith as I walk in Your purpose. Amen." },
-    { verse: "Romans 8:28 - And we know that in all things God works for the good of those who love him, who have been called according to his purpose.", prayer: "Lord, even when I don’t understand, help me to trust that You are working for my good. Amen." },
-    { verse: "Psalm 23:4 - Even though I walk through the darkest valley, I will fear no evil, for You are with me; Your rod and Your staff, they comfort me.", prayer: "God, strengthen me in my trials and remind me that You are always by my side. Amen." },
-    { verse: "Psalm 23:6 - Surely your goodness and love will follow me all the days of my life, and I will dwell in the house of the LORD forever.", prayer: "Lord, I rest in Your goodness and look forward to eternity in Your presence. Amen." },
-    { verse: "Matthew 6:33 - But seek first His kingdom and His righteousness, and all these things will be given to you as well.", prayer: "Father, help me to keep You at the center of my life and trust in Your provision. Amen." },
-    { verse: "Philippians 4:6 - Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.", prayer: "God, calm my anxious heart and teach me to surrender everything to You. Amen." },
-    { verse: "Romans 12:2 - Do not conform to the pattern of this world, but be transformed by the renewing of your mind.", prayer: "Lord, renew my mind daily so that I may reflect Your will in my life. Amen." },
-    { verse: "Philippians 4:13 - I can do all this through him who gives me strength.", prayer: "Jesus, be my strength in times of struggle and my guide in moments of doubt. Amen." },
-    { verse: "Joshua 1:9 - Be strong and courageous. Do not be afraid; do not be discouraged, for the LORD your God will be with you wherever you go.", prayer: "Father, fill my heart with courage and faith, knowing that You are always with me. Amen." },
-    { verse: "Isaiah 41:10 - Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you.", prayer: "Lord, remove my fears and remind me of Your power and presence in my life. Amen." },
-    { verse: "Psalm 46:10 - Be still, and know that I am God; I will be exalted among the nations.", prayer: "God, teach me to be still and to trust in Your control over all things. Amen." },
-    { verse: "Hebrews 11:1 - Now faith is confidence in what we hope for and assurance about what we do not see.", prayer: "Father, increase my faith and help me trust in Your unseen plans. Amen." },
-    { verse: "Matthew 28:19 - Therefore go and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.", prayer: "Lord, use me as a vessel to share Your love and truth with others. Amen." },
-    { verse: "Romans 5:8 - But God demonstrates his own love for us in this: While we were still sinners, Christ died for us.", prayer: "Jesus, thank You for Your sacrifice. Help me to live in a way that honors You. Amen." },
-    { verse: "Psalm 100:2 - Worship the Lord with gladness; come before him with joyful songs.", prayer: "Lord, fill my heart with joy and gratitude as I worship You. Amen." },
-    { verse: "Colossians 3:23 - Whatever you do, work at it with all your heart, as working for the Lord.", prayer: "God, help me to do everything with excellence and devotion, as an offering to You. Amen." },
-    { verse: "Isaiah 26:3 - You will keep in perfect peace those whose minds are steadfast, because they trust in You.", prayer: "Father, grant me perfect peace as I keep my focus on You. Amen." },
-    { verse: "Hebrews 4:12 - For the word of God is alive and active. Sharper than any double-edged sword.", prayer: "Lord, let Your Word transform me and guide my every decision. Amen." },
-    { verse: "Proverbs 3:5 - Trust in the Lord with all your heart and lean not on your own understanding.", prayer: "God, help me to trust You even when I do not understand. Amen." },
-    { verse: "1 Peter 5:7 - Cast all your anxiety on Him because He cares for you.", prayer: "Lord, I give my worries to You. Thank You for always caring for me. Amen." },
-    { verse: "James 1:5 - If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.", prayer: "Father, grant me wisdom in all that I do, so I may glorify You. Amen." },
-    { verse: "2 Timothy 1:7 - For God has not given us a spirit of fear, but of power, love, and self-discipline.", prayer: "Lord, replace my fears with Your power, love, and wisdom. Amen." },
-    { verse: "Ephesians 2:8-9 - For it is by grace you have been saved, through faith—and this is not from yourselves, it is the gift of God—not by works, so that no one can boast.", prayer: "Thank You, Lord, for Your amazing grace. Help me to always rely on Your gift of salvation. Amen." },
-    { verse: "Galatians 6:9 - Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.", prayer: "Lord, give me endurance to continue doing good, trusting in Your perfect timing. Amen." },
-    { verse: "Psalm 37:4 - Take delight in the LORD, and He will give you the desires of your heart.", prayer: "Father, align my desires with Your will and fill my heart with joy in You. Amen." },
-    { verse: "John 14:27 - Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.", prayer: "Jesus, fill me with Your peace and remove all anxiety from my heart. Amen." },
-    { verse: "Micah 6:8 - He has shown you, O mortal, what is good. And what does the LORD require of you? To act justly and to love mercy and to walk humbly with your God.", prayer: "Lord, help me to live with justice, mercy, and humility before You. Amen." },
-    { verse: "Deuteronomy 31:6 - Be strong and courageous. Do not be afraid or terrified because of them, for the LORD your God goes with you; He will never leave you nor forsake you.", prayer: "God, give me strength and courage, knowing You are always with me. Amen." },
-    { verse: "Matthew 11:28 - Come to me, all you who are weary and burdened, and I will give you rest.", prayer: "Jesus, I lay my burdens at Your feet. Give me rest and peace in Your presence. Amen." }
-];
+    // Submit a prayer to Firebase Realtime Database
+    const submitBtn = document.getElementById("submitPrayer");
+    submitBtn.addEventListener("click", () => {
+      const nameInput = document.getElementById("name").value.trim();
+      const prayerInput = document.getElementById("prayerInput").value.trim();
 
-        function generateVerse() {
-            const randomIndex = Math.floor(Math.random() * verses.length);
-            document.getElementById("verse").innerText = verses[randomIndex].verse;
-            document.getElementById("prayer").innerText = verses[randomIndex].prayer;
-        }
+      if (prayerInput === "") {
+        alert("Please enter a prayer before submitting.");
+        return;
+      }
 
-        function submitPrayer() {
-            const nameInput = document.getElementById("name").value.trim();
-            const prayerInput = document.getElementById("prayerInput").value.trim();
-            
-            if (prayerInput === "") {
-                alert("Please enter a prayer before submitting.");
-                return;
-            }
+      const name = nameInput === "" ? "Anonymous" : nameInput;
+      const now = new Date();
 
-            const name = nameInput === "" ? "Anonymous" : nameInput;
-            const now = new Date();
+      // Format date and time
+      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+      const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
 
-            // Formatting date and time
-            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-            
-            const datePosted = now.toLocaleDateString("en-US", dateOptions);
-            const timePosted = now.toLocaleTimeString("en-US", timeOptions);
+      const datePosted = now.toLocaleDateString("en-US", dateOptions);
+      const timePosted = now.toLocaleTimeString("en-US", timeOptions);
 
-            // Create prayer object
-            const prayerEntry = {
-                name: name,
-                prayer: prayerInput,
-                date: datePosted,
-                time: timePosted
-            };
+      // Prayer data object
+      const prayerEntry = {
+        name: name,
+        prayer: prayerInput,
+        date: datePosted,
+        time: timePosted
+      };
 
-            // Save to localStorage
-            let prayers = JSON.parse(localStorage.getItem("prayers")) || [];
-            prayers.unshift(prayerEntry);
-            localStorage.setItem("prayers", JSON.stringify(prayers));
+      // Push to Firebase
+      const prayersRef = ref(db, 'prayers');
+      push(prayersRef, prayerEntry)
+        .then(() => {
+          document.getElementById("name").value = "";
+          document.getElementById("prayerInput").value = "";
+        })
+        .catch(err => {
+          alert("Error submitting prayer: " + err);
+        });
+    });
 
-            // Display the prayer
-            displayPrayers();
+    // Display prayers live from Firebase
+    function displayPrayers() {
+      const prayerList = document.getElementById("prayer-list");
+      const prayersRef = ref(db, 'prayers');
 
-            // Clear input fields
-            document.getElementById("name").value = "";
-            document.getElementById("prayerInput").value = "";
-        }
+      onValue(prayersRef, (snapshot) => {
+        prayerList.innerHTML = "";
+        const data = snapshot.val();
+        if (!data) return;
 
-        function displayPrayers() {
-            const prayerList = document.getElementById("prayer-list");
-            prayerList.innerHTML = "";
+        // Convert object to array sorted by newest first
+        const prayersArray = Object.entries(data)
+          .map(([key, val]) => val)
+          .sort((a,b) => {
+            // Sort by date/time descending
+            const dateA = new Date(a.date + " " + a.time);
+            const dateB = new Date(b.date + " " + b.time);
+            return dateB - dateA;
+          });
 
-            let prayers = JSON.parse(localStorage.getItem("prayers")) || [];
+        prayersArray.forEach(prayer => {
+          const prayerItem = document.createElement("div");
+          prayerItem.classList.add("prayer-item");
+          prayerItem.innerHTML = `<strong>${prayer.name}</strong><br>${prayer.prayer}<br><small>${prayer.date} at ${prayer.time}</small>`;
+          prayerList.appendChild(prayerItem);
+        });
+      });
+    }
 
-            prayers.forEach(prayer => {
-                const prayerItem = document.createElement("div");
-                prayerItem.classList.add("prayer-item");
-                prayerItem.innerHTML = `<strong>${prayer.name}</strong> <br> ${prayer.prayer} <br><small>${prayer.date} at ${prayer.time}</small>`;
-                prayerList.appendChild(prayerItem);
-            });
-        }
-
-        window.onload = function() {
-            displayDate();
-            generateVerse();
-            displayPrayers();
-        };
-    </script>
+    window.onload = () => {
+      displayDate();
+      generateVerse();
+      displayPrayers();
+    };
+  </script>
 </body>
 </html>
