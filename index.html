@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Bible App by Yel Portillo</title>
+  <title>Bible App - Random Verse & Prayer Wall</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -93,6 +93,14 @@
       width: 90%;
       max-width: 500px;
       word-wrap: break-word;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    .prayer-item small {
+      color: #666;
+      font-size: 12px;
+      display: block;
+      margin-top: 8px;
     }
     #prayerTab input,
     #prayerTab textarea {
@@ -112,6 +120,25 @@
       max-width: 600px;
       margin: auto;
       padding: 20px;
+    }
+    #verse {
+      white-space: pre-line; /* allow line breaks */
+      font-weight: normal;
+      font-size: 18px;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      color: #222;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #prayer {
+      font-style: italic;
+      color: #555;
+      max-width: 90%;
+      margin: 10px auto 20px auto;
+      font-size: 15px;
+      line-height: 1.4;
     }
     @media screen and (max-width: 480px) {
       #prayerTab input,
@@ -134,7 +161,8 @@
     <div id="verseTab" class="tab active">
       <h2>Verse of the Day</h2>
       <p id="date"></p>
-      <p id="verse" style="font-weight:bold; font-size: 18px;"></p>
+      <p id="verse">Loading verse...</p>
+      <p id="prayer"></p>
       <img src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg" alt="Bible Image" />
       <button onclick="generateVerse()">Generate New Verse</button>
     </div>
@@ -153,7 +181,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-    // REPLACE with your Firebase config:
+    // Your Firebase config here (replace with your own)
     const firebaseConfig = {
       apiKey: "AIzaSyBFAN4AUuoKtnyqR9I558Pjzznj8Me3io0",
       authDomain: "bible-app-7d43d.firebaseapp.com",
@@ -167,7 +195,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Books and chapters count for random verse generation
     const booksAndChapters = {
       Genesis: 50, Exodus: 40, Leviticus: 27, Numbers: 36, Deuteronomy: 34,
       Joshua: 24, Judges: 21, Ruth: 4, "1 Samuel": 31, "2 Samuel": 24,
@@ -186,27 +213,27 @@
       "1 John": 5, "2 John": 1, "3 John": 1, Jude: 1, Revelation: 22
     };
 
-    // Toggle menu
+    // Toggle menu visibility
     window.toggleMenu = () => {
       const menu = document.getElementById("menu-items");
       menu.style.display = menu.style.display === "block" ? "none" : "block";
     };
 
-    // Switch between tabs
+    // Switch tabs and hide menu
     window.switchTab = (tabId) => {
       document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
       document.getElementById(tabId).classList.add("active");
       document.getElementById("menu-items").style.display = "none";
     };
 
-    // Show current date
+    // Display today's date
     window.displayDate = () => {
       const today = new Date();
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       document.getElementById("date").innerText = today.toLocaleDateString("en-US", options);
     };
 
-    // Generate a random verse from the Bible API
+    // Generate random Bible verse + prayer
     async function generateRandomVerse() {
       const books = Object.keys(booksAndChapters);
       const randomBook = books[Math.floor(Math.random() * books.length)];
@@ -219,23 +246,39 @@
 
         if (!data || !data.verses || data.verses.length === 0) {
           document.getElementById("verse").innerText = "Verse not found, try again.";
+          document.getElementById("prayer").innerText = "";
           return;
         }
 
+        // Pick a random verse from chapter
         const randomVerse = data.verses[Math.floor(Math.random() * data.verses.length)];
-        document.getElementById("verse").innerText = `${randomBook} ${randomChapter}:${randomVerse.verse} - ${randomVerse.text.trim()}`;
+
+        // Format the verse with line breaks:
+        // [Book Chapter:Verse]
+        // Verse text
+        // (blank line)
+        // Prayer text (simple template)
+        const verseText =
+          `${randomBook} ${randomChapter}:${randomVerse.verse}\n\n${randomVerse.text.trim()}`;
+
+        // Basic short prayer template
+        const prayerText = `Lord, thank You for this word. Help me to live it in my heart today. Amen.`;
+
+        document.getElementById("verse").innerText = verseText;
+        document.getElementById("prayer").innerText = prayerText;
+
       } catch (error) {
         document.getElementById("verse").innerText = "Error fetching verse. Please try again.";
+        document.getElementById("prayer").innerText = "";
         console.error(error);
       }
     }
 
-    // Button handler
     window.generateVerse = () => {
       generateRandomVerse();
     };
 
-    // Submit a prayer to Firebase Realtime Database
+    // Submit prayer to Firebase
     const submitBtn = document.getElementById("submitPrayer");
     submitBtn.addEventListener("click", () => {
       const nameInput = document.getElementById("name").value.trim();
@@ -249,22 +292,15 @@
       const name = nameInput === "" ? "Anonymous" : nameInput;
       const now = new Date();
 
-      // Format date and time
-      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-      const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      // Save ISO string so sorting works better
+      const timestamp = now.toISOString();
 
-      const datePosted = now.toLocaleDateString("en-US", dateOptions);
-      const timePosted = now.toLocaleTimeString("en-US", timeOptions);
-
-      // Prayer data object
       const prayerEntry = {
         name: name,
         prayer: prayerInput,
-        date: datePosted,
-        time: timePosted
+        timestamp: timestamp
       };
 
-      // Push to Firebase
       const prayersRef = ref(db, 'prayers');
       push(prayersRef, prayerEntry)
         .then(() => {
@@ -286,20 +322,25 @@
         const data = snapshot.val();
         if (!data) return;
 
-        // Convert object to array sorted by newest first
-        const prayersArray = Object.entries(data)
-          .map(([key, val]) => val)
-          .sort((a,b) => {
-            // Sort by date/time descending
-            const dateA = new Date(a.date + " " + a.time);
-            const dateB = new Date(b.date + " " + b.time);
-            return dateB - dateA;
-          });
+        // Convert object to array and sort newest first by timestamp
+        const prayersArray = Object.values(data).sort((a, b) => {
+          return new Date(b.timestamp) - new Date(a.timestamp);
+        });
 
         prayersArray.forEach(prayer => {
           const prayerItem = document.createElement("div");
           prayerItem.classList.add("prayer-item");
-          prayerItem.innerHTML = `<strong>${prayer.name}</strong><br>${prayer.prayer}<br><small>${prayer.date} at ${prayer.time}</small>`;
+
+          // Format date/time nicely
+          const dt = new Date(prayer.timestamp);
+          const dateStr = dt.toLocaleDateString("en-US", { year:'numeric', month:'long', day:'numeric' });
+          const timeStr = dt.toLocaleTimeString("en-US", { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true });
+
+          prayerItem.innerHTML = `
+            <strong>${prayer.name}</strong><br>
+            ${prayer.prayer.replace(/\n/g, "<br>")}<br>
+            <small>${dateStr} at ${timeStr}</small>
+          `;
           prayerList.appendChild(prayerItem);
         });
       });
@@ -307,9 +348,12 @@
 
     window.onload = () => {
       displayDate();
-      generateVerse();
+      generateRandomVerse();
       displayPrayers();
     };
+  </script>
+</body>
+</html>
   </script>
 </body>
 </html>
