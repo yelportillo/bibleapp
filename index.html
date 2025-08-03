@@ -208,9 +208,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
+    // Menu toggle
     const menuBtn = document.getElementById("menu-btn");
     const menuItems = document.getElementById("menu-items");
-
     menuBtn.addEventListener("click", () => {
       menuItems.style.display = menuItems.style.display === "block" ? "none" : "block";
     });
@@ -223,68 +223,34 @@
       });
     });
 
+    // Date
     document.getElementById("date").innerText = new Date().toLocaleDateString("en-US", { 
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
     });
 
-    const booksAndChapters = {
-      Psalms: 150, Proverbs: 31, Matthew: 28, John: 21, Romans: 16, Isaiah: 66, Philippians: 4
-    };
-
-    const prayers = {
-      faith: [
-        "Lord, strengthen my faith and keep my heart steadfast in Your promises. Amen.",
-        "Father, help me trust in You even when I cannot see the way ahead. Amen."
-      ],
-      peace: [
-        "Jesus, calm my spirit and fill me with Your peace that surpasses understanding. Amen.",
-        "Lord, in the chaos, be my stillness and comfort. Amen."
-      ],
-      strength: [
-        "God, give me the strength to face each challenge with courage. Amen.",
-        "Lord, be my rock and my refuge in every trial. Amen."
-      ],
-      guidance: [
-        "Father, lead me on the path of righteousness and keep me from straying. Amen.",
-        "Holy Spirit, direct my steps and grant me wisdom in every decision. Amen."
-      ],
-      love: [
-        "Lord, help me to love others as You have loved me. Amen.",
-        "Father, fill me with compassion and grace towards everyone I meet. Amen."
-      ]
-    };
-
+    // Generate verse
     async function generateVerse() {
-      const books = Object.keys(booksAndChapters);
+      const books = ["Psalms", "Proverbs", "Matthew", "John", "Romans", "Isaiah", "Philippians"];
       const book = books[Math.floor(Math.random() * books.length)];
-      const chapter = Math.floor(Math.random() * booksAndChapters[book]) + 1;
+      const chapter = Math.floor(Math.random() * 10) + 1;
 
       try {
-        const res = await fetch(`https://bible-api.com/${book} ${chapter}`);
+        const res = await fetch(`https://bible-api.com/${book}%20${chapter}`);
         const data = await res.json();
 
         if (!data.verses) return;
 
         const verse = data.verses[Math.floor(Math.random() * data.verses.length)];
         document.getElementById("verse").innerText = `${book} ${chapter}:${verse.verse}\n\n${verse.text.trim()}`;
-
-        const text = verse.text.toLowerCase();
-        let category = "faith";
-        if (text.includes("peace")) category = "peace";
-        else if (text.includes("love")) category = "love";
-        else if (text.includes("strength") || text.includes("courage")) category = "strength";
-        else if (text.includes("guide") || text.includes("wisdom")) category = "guidance";
-
-        const prayerList = prayers[category];
-        document.getElementById("prayer").innerText = prayerList[Math.floor(Math.random() * prayerList.length)];
+        document.getElementById("prayer").innerText = "Lord, let this Word strengthen and guide me today. Amen.";
       } catch {
         document.getElementById("verse").innerText = "Failed to load verse.";
         document.getElementById("prayer").innerText = "";
       }
     }
-
     document.getElementById("new-verse").addEventListener("click", generateVerse);
 
+    // Display prayers
     function displayPrayers() {
       const prayerList = document.getElementById("prayer-list");
       const prayersRef = ref(db, 'prayers');
@@ -309,6 +275,7 @@
       });
     }
 
+    // Submit prayer
     document.getElementById("submitPrayer").addEventListener("click", () => {
       const name = document.getElementById("name").value.trim() || "Anonymous";
       const prayer = document.getElementById("prayerInput").value.trim();
