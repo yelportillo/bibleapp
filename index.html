@@ -276,7 +276,7 @@
     }
 
     // Submit prayer
-    document.getElementById("submitPrayer").addEventListener("click", () => {
+    document.getElementById("submitPrayer").addEventListener("click", async () => {
       const name = document.getElementById("name").value.trim() || "Anonymous";
       const prayer = document.getElementById("prayerInput").value.trim();
 
@@ -285,7 +285,7 @@
         return;
       }
 
-      push(ref(db, "prayers"), {
+      await push(ref(db, "prayers"), {
         name,
         prayer,
         timestamp: new Date().toISOString()
