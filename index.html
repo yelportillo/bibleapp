@@ -6,7 +6,7 @@
 <title>Bible App</title>
 <style>
   body {
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0; padding: 0;
     text-align: center;
@@ -168,30 +168,13 @@
   </div>
 </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBFAN4AUuoKtnyqR9I558Pjzznj8Me3io0",
-    authDomain: "bible-app-7d43d.firebaseapp.com",
-    databaseURL: "https://bible-app-7d43d-default-rtdb.firebaseio.com",
-    projectId: "bible-app-7d43d",
-    storageBucket: "bible-app-7d43d.appspot.com",
-    messagingSenderId: "201267074022",
-    appId: "1:201267074022:web:925599a081b283c2bdbc27"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
+<script>
   // Menu toggle
   const menuBtn = document.getElementById("menu-btn");
   const menuItems = document.getElementById("menu-items");
   menuBtn.addEventListener("click", () => {
     menuItems.style.display = menuItems.style.display === "block" ? "none" : "block";
   });
-
   menuItems.querySelectorAll("li").forEach(item => {
     item.addEventListener("click", () => {
       document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
@@ -201,17 +184,15 @@
   });
 
   // Show current date on Verse Tab
-  document.getElementById("date").innerText = new Date().toLocaleDateString("en-US", { 
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+  document.getElementById("date").innerText = new Date().toLocaleDateString("en-US", {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
 
-  // Generate a random verse & prayer with switch (no arrays)
+  // Generate a random verse & related prayer without arrays
   function generateVerse() {
     const rand = Math.floor(Math.random() * 5) + 1;
-
     let verse = "";
     let prayer = "";
-
     switch (rand) {
       case 1:
         verse = `John 3:16
@@ -239,82 +220,58 @@ And we know that in all things God works for the good of those who love Him, who
         prayer = `Lord, help me trust that You are working all things for my good.`;
         break;
     }
-
     document.getElementById("verse").innerText = verse;
     document.getElementById("prayer").innerText = prayer;
   }
 
   document.getElementById("new-verse").addEventListener("click", generateVerse);
 
-  // Display prayers live from Firebase
+  // Display prayers from localStorage
   function displayPrayers() {
     const prayerList = document.getElementById("prayer-list");
-    const prayersRef = ref(db, "prayers");
+    prayerList.innerHTML = "";
+    let prayers = JSON.parse(localStorage.getItem("prayers")) || [];
 
-    onValue(prayersRef, (snapshot) => {
-      prayerList.innerHTML = "";
-      const data = snapshot.val();
-      if (!data) return;
-
-      // Sort newest first
-      const prayersArray = Object.values(data).sort(
-        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-      );
-
-      prayersArray.forEach((prayer) => {
-        const dt = new Date(prayer.timestamp || Date.now());
-        const item = document.createElement("div");
-        item.className = "prayer-item";
-        item.innerHTML = `
-          <div>${prayer.name || "Anonymous"}</div>
-          <div>${prayer.prayer}</div>
-          <small>${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
-        `;
-        prayerList.appendChild(item);
-      });
+    prayers.forEach(prayer => {
+      const item = document.createElement("div");
+      item.className = "prayer-item";
+      const dt = new Date(prayer.timestamp);
+      item.innerHTML = `
+        <div><strong>${prayer.name}</strong></div>
+        <div>${prayer.prayer}</div>
+        <small>${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+      `;
+      prayerList.appendChild(item);
     });
   }
 
-  // Submit prayer - show immediately on screen AND push to Firebase
-  document.getElementById("submitPrayer").addEventListener("click", async () => {
-    const name = document.getElementById("name").value.trim() || "Anonymous";
-    const prayer = document.getElementById("prayerInput").value.trim();
-
-    if (!prayer) {
-      alert("Please enter a prayer.");
+  // Submit prayer and save to localStorage + display immediately
+  document.getElementById("submitPrayer").addEventListener("click", () => {
+    const nameInput = document.getElementById("name").value.trim();
+    const prayerInput = document.getElementById("prayerInput").value.trim();
+    if (prayerInput === "") {
+      alert("Please enter a prayer before submitting.");
       return;
     }
 
-    try {
-      const prayersRef = ref(db, "prayers");
-      await push(prayersRef, {
-        name,
-        prayer,
-        timestamp: new Date().toISOString()
-      });
+    const name = nameInput === "" ? "Anonymous" : nameInput;
+    const timestamp = new Date().toISOString();
 
-      // Clear inputs
-      document.getElementById("name").value = "";
-      document.getElementById("prayerInput").value = "";
+    const newPrayer = { name, prayer: prayerInput, timestamp };
 
-      // Immediately add to the prayer list on top
-      const prayerList = document.getElementById("prayer-list");
-      const dt = new Date();
-      const item = document.createElement("div");
-      item.className = "prayer-item";
-      item.innerHTML = `
-        <div>${name}</div>
-        <div>${prayer}</div>
-        <small>${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
-      `;
-      prayerList.insertBefore(item, prayerList.firstChild);
+    let prayers = JSON.parse(localStorage.getItem("prayers")) || [];
+    prayers.unshift(newPrayer);
+    localStorage.setItem("prayers", JSON.stringify(prayers));
 
-    } catch (error) {
-      console.error("Error submitting prayer:", error);
-      alert("Failed to submit prayer. Check database rules.");
-    }
+    // Clear input fields
+    document.getElementById("name").value = "";
+    document.getElementById("prayerInput").value = "";
+
+    // Update the prayer list immediately
+    displayPrayers();
   });
 
+  // On load
   window.onload = () => {
     generateVerse();
     displayPrayers();
