@@ -175,49 +175,156 @@
 
 <script>
   const verses = [
-    { verse: "John 3:16 - For God so loved the world that He gave His one and only Son...", prayer: "Lord, I praise You for Your endless love, I repent of my sins, I ask for Your guidance, and I yield my life to Your will. Amen." },
-    { verse: "Philippians 4:13 - I can do all things through Christ who strengthens me.", prayer: "Father, I praise You for being my strength, I repent for doubting, I ask for courage, and I yield to Your perfect plan. Amen." },
-    { verse: "Psalm 23:1 - The Lord is my shepherd, I shall not want.", prayer: "Lord, I praise You for Your care, I repent for my fears, I ask for peace, and I yield to Your guidance. Amen." },
-    { verse: "Romans 8:28 - All things work together for good for those who love God.", prayer: "God, I praise You for Your wisdom, I repent for my impatience, I ask for faith, and I yield to Your purpose. Amen." },
-    { verse: "Isaiah 41:10 - Fear not, for I am with you.", prayer: "Father, I praise You for being near, I repent for my anxiety, I ask for comfort, and I yield to Your strength. Amen." },
-    { verse: "Proverbs 3:5 - Trust in the Lord with all your heart.", prayer: "Lord, I praise You for Your faithfulness, I repent for leaning on myself, I ask for trust, and I yield to Your will. Amen." },
-    { verse: "Matthew 11:28 - Come to me, all who are weary.", prayer: "Jesus, I praise You for Your rest, I repent for carrying my burdens alone, I ask for peace, and I yield to Your comfort. Amen." },
-    { verse: "Jeremiah 29:11 - For I know the plans I have for you.", prayer: "God, I praise You for Your plans, I repent for doubting, I ask for hope, and I yield to Your timing. Amen." },
-    { verse: "Psalm 46:10 - Be still and know that I am God.", prayer: "Lord, I praise You for Your power, I repent for my worry, I ask for stillness, and I yield to Your presence. Amen." },
-    { verse: "Ephesians 2:8 - For by grace you have been saved.", prayer: "Father, I praise You for Your grace, I repent of my pride, I ask for humility, and I yield to Your mercy. Amen." },
-    { verse: "2 Corinthians 5:7 - We walk by faith, not by sight.", prayer: "Lord, I praise You for leading me, I repent for my doubt, I ask for stronger faith, and I yield to Your guidance. Amen." },
-    { verse: "Psalm 119:105 - Your word is a lamp to my feet.", prayer: "God, I praise You for Your Word, I repent for neglecting it, I ask for wisdom, and I yield to Your truth. Amen." },
-    { verse: "1 Peter 5:7 - Cast all your anxiety on Him.", prayer: "Lord, I praise You for carrying my cares, I repent for holding onto fear, I ask for peace, and I yield to Your care. Amen." },
-    { verse: "Romans 12:2 - Be transformed by the renewing of your mind.", prayer: "God, I praise You for new life, I repent of old ways, I ask for renewal, and I yield to Your Spirit. Amen." },
-    { verse: "Matthew 5:16 - Let your light shine before others.", prayer: "Father, I praise You for Your light, I repent for hiding my faith, I ask for boldness, and I yield to Your calling. Amen." },
-    { verse: "Joshua 1:9 - Be strong and courageous.", prayer: "Lord, I praise You for Your strength, I repent for my fear, I ask for courage, and I yield to Your power. Amen." },
-    { verse: "Hebrews 11:1 - Faith is confidence in what we hope for.", prayer: "God, I praise You for hope, I repent for my doubts, I ask for greater faith, and I yield to Your promises. Amen." },
-    { verse: "Colossians 3:23 - Work heartily for the Lord.", prayer: "Lord, I praise You for purpose, I repent for laziness, I ask for diligence, and I yield my work to You. Amen." },
-    { verse: "John 14:6 - I am the way, the truth, and the life.", prayer: "Jesus, I praise You for being my Savior, I repent for wandering, I ask for direction, and I yield to Your way. Amen." },
-    { verse: "Galatians 5:22 - The fruit of the Spirit is love, joy, peace.", prayer: "Father, I praise You for Your Spirit, I repent for my anger, I ask for love, and I yield to Your peace. Amen." },
-    { verse: "Psalm 34:8 - Taste and see that the Lord is good.", prayer: "God, I praise You for Your goodness, I repent for my ingratitude, I ask for contentment, and I yield to Your care. Amen." },
-    { verse: "1 John 4:19 - We love because He first loved us.", prayer: "Lord, I praise You for loving me first, I repent for withholding love, I ask for compassion, and I yield to Your example. Amen." },
-    { verse: "James 1:5 - If any of you lacks wisdom, ask God.", prayer: "God, I praise You for Your wisdom, I repent for relying on myself, I ask for understanding, and I yield to Your counsel. Amen." },
-    { verse: "Psalm 37:4 - Delight yourself in the Lord.", prayer: "Father, I praise You for Your joy, I repent for seeking happiness elsewhere, I ask for delight, and I yield to Your will. Amen." },
-    { verse: "Romans 10:9 - If you declare Jesus is Lord, you will be saved.", prayer: "Lord, I praise You for salvation, I repent for my sins, I ask for Your forgiveness, and I yield to Your Lordship. Amen." },
-    { verse: "Isaiah 40:31 - Those who hope in the Lord will renew their strength.", prayer: "God, I praise You for new strength, I repent for my impatience, I ask for endurance, and I yield to Your timing. Amen." },
-    { verse: "Matthew 28:20 - I am with you always.", prayer: "Jesus, I praise You for Your presence, I repent for feeling alone, I ask for comfort, and I yield to Your nearness. Amen." },
-    { verse: "Psalm 91:2 - He is my refuge and my fortress.", prayer: "Lord, I praise You for Your protection, I repent for my fear, I ask for safety, and I yield to Your shelter. Amen." },
-    { verse: "John 8:12 - I am the light of the world.", prayer: "Jesus, I praise You for being the light, I repent for walking in darkness, I ask for clarity, and I yield to Your truth. Amen." },
-    { verse: "Revelation 21:4 - He will wipe every tear from their eyes.", prayer: "Father, I praise You for Your comfort, I repent for my despair, I ask for hope, and I yield to Your eternal promise. Amen." }
-  ];
-
-  const bibleImages = [
-    "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d",
-    "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e",
-    "https://images.unsplash.com/photo-1584824486509-112e4181ff6b",
-    "https://images.unsplash.com/photo-1495653797063-114787b77b23",
-    "https://images.unsplash.com/photo-1551479877-3f0e8ef3f07f",
-    "https://images.unsplash.com/photo-1483721310020-03333e577078",
-    "https://images.unsplash.com/photo-1473187983305-f615310e7daa",
-    "https://images.unsplash.com/photo-1603791452906-bb3f14f6e731",
-    "https://images.unsplash.com/photo-1501612780327-45045538702b",
-    "https://images.unsplash.com/photo-1549887534-7c84b20c1f3e"
+    {
+      verse: "John 3:16 - For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
+      prayer: "Lord, we praise You for Your amazing love, we repent for not always trusting Your plan, we ask for faith to believe deeply, and we yield our hearts to Your eternal grace. Amen.",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Philippians 4:13 - I can do all this through him who gives me strength.",
+      prayer: "Father, I praise You for being my strength in weakness, I repent for moments of doubt, I ask for courage to face challenges, and I yield to Your empowering Spirit. Amen.",
+      image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Psalm 23:1 - The Lord is my shepherd, I lack nothing.",
+      prayer: "Lord, I praise You for Your faithful guidance, I repent when I try to walk alone, I ask for peace in Your provision, and I yield to Your loving care. Amen.",
+      image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Romans 8:28 - And we know that in all things God works for the good of those who love him, who have been called according to his purpose.",
+      prayer: "God, I praise Your sovereign hand in my life, I repent for questioning Your plan, I ask for trust in trials, and I yield to Your perfect will. Amen.",
+      image: "https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Isaiah 41:10 - So do not fear, for I am with you; do not be dismayed, for I am your God.",
+      prayer: "Father, I praise You for Your comforting presence, I repent for my fears, I ask for courage and peace, and I yield my worries to You. Amen.",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Proverbs 3:5 - Trust in the Lord with all your heart and lean not on your own understanding;",
+      prayer: "Lord, I praise Your wisdom above all, I repent for relying on my own ways, I ask for a heart fully trusting You, and I yield my understanding to Your guidance. Amen.",
+      image: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Matthew 11:28 - Come to me, all you who are weary and burdened, and I will give you rest.",
+      prayer: "Jesus, I praise You as my rest and refuge, I repent for carrying burdens alone, I ask for Your peace to fill me, and I yield my cares to You. Amen.",
+      image: "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Jeremiah 29:11 - For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.",
+      prayer: "God, I praise Your perfect plans for me, I repent for impatience, I ask for hope in uncertain times, and I yield to Your loving purposes. Amen.",
+      image: "https://images.unsplash.com/photo-1486308510493-cb7a4fb2f8b9?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Psalm 46:10 - Be still, and know that I am God.",
+      prayer: "Lord, I praise Your sovereignty, I repent for my anxious heart, I ask for peace in stillness, and I yield to Your divine timing. Amen.",
+      image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Ephesians 2:8 - For it is by grace you have been saved, through faith—and this is not from yourselves, it is the gift of God.",
+      prayer: "Father, I praise Your amazing grace, I repent for trying to earn Your favor, I ask for a faith that trusts fully, and I yield to Your gift of salvation. Amen.",
+      image: "https://images.unsplash.com/photo-1525186402429-4f0b48a90f4d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "2 Corinthians 5:17 - Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!",
+      prayer: "Lord, I praise You for making me new, I repent for holding onto old sins, I ask for transformation by Your Spirit, and I yield my life to Your renewal. Amen.",
+      image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Psalm 119:105 - Your word is a lamp to my feet and a light to my path.",
+      prayer: "God, I praise Your guiding Word, I repent when I ignore Your truth, I ask for clarity on my path, and I yield to Your direction. Amen.",
+      image: "https://images.unsplash.com/photo-1526318472351-3e0db3c98aeb?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Galatians 5:22-23 - But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.",
+      prayer: "Holy Spirit, I praise You for bearing fruit in me, I repent for living in the flesh, I ask for Your fruit to grow daily, and I yield my heart to Your work. Amen.",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Hebrews 11:1 - Now faith is confidence in what we hope for and assurance about what we do not see.",
+      prayer: "Lord, I praise You for the gift of faith, I repent when doubt clouds my heart, I ask for confidence in Your promises, and I yield to trusting You fully. Amen.",
+      image: "https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Matthew 6:33 - But seek first his kingdom and his righteousness, and all these things will be given to you as well.",
+      prayer: "Father, I praise You as my highest priority, I repent when I chase worldly things, I ask for a kingdom-focused heart, and I yield all desires to You. Amen.",
+      image: "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Romans 12:2 - Do not conform to the pattern of this world, but be transformed by the renewing of your mind.",
+      prayer: "Lord, I praise Your power to transform, I repent for conforming to the world, I ask for a renewed mind, and I yield to Your perfect will. Amen.",
+      image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Psalm 37:4 - Delight yourself in the Lord, and he will give you the desires of your heart.",
+      prayer: "God, I praise You as my delight, I repent for seeking satisfaction elsewhere, I ask for alignment of desires with Your will, and I yield my heart fully to You. Amen.",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "1 Peter 5:7 - Cast all your anxiety on him because he cares for you.",
+      prayer: "Lord, I praise Your care and compassion, I repent for carrying burdens alone, I ask for peace in surrender, and I yield my worries to Your loving hands. Amen.",
+      image: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Joshua 1:9 - Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",
+      prayer: "Father, I praise Your steadfast presence, I repent for fear and discouragement, I ask for courage, and I yield my fears to You. Amen.",
+      image: "https://images.unsplash.com/photo-1525186402429-4f0b48a90f4d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Romans 5:8 - But God demonstrates his own love for us in this: While we were still sinners, Christ died for us.",
+      prayer: "Lord, I praise Your unfailing love, I repent for forgetting Your sacrifice, I ask for a grateful heart, and I yield my life in response to Your grace. Amen.",
+      image: "https://images.unsplash.com/photo-1495653797063-114787b77b23?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Psalm 34:18 - The Lord is close to the brokenhearted and saves those who are crushed in spirit.",
+      prayer: "God, I praise You as my comforter, I repent for despair, I ask for healing and hope, and I yield my broken heart to You. Amen.",
+      image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "1 Corinthians 13:4-5 - Love is patient, love is kind. It does not envy, it does not boast, it is not proud.",
+      prayer: "Lord, I praise You as the source of perfect love, I repent for selfishness, I ask for a loving heart, and I yield my life to Your love. Amen.",
+      image: "https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Isaiah 40:31 - But those who hope in the Lord will renew their strength.",
+      prayer: "Father, I praise You for renewing my strength, I repent for losing hope, I ask for endurance, and I yield my spirit to You. Amen.",
+      image: "https://images.unsplash.com/photo-1473187983305-f615310e7daa?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Colossians 3:23 - Whatever you do, work at it with all your heart, as working for the Lord.",
+      prayer: "Lord, I praise You as my motivation, I repent for half-hearted efforts, I ask for diligence, and I yield my work to Your glory. Amen.",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "John 14:6 - Jesus answered, 'I am the way and the truth and the life.'",
+      prayer: "Jesus, I praise You as my only way, I repent for doubting Your truth, I ask for guidance, and I yield my life to You. Amen.",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Matthew 5:16 - Let your light shine before others, that they may see your good deeds and glorify your Father in heaven.",
+      prayer: "Father, I praise You as my light, I repent for hiding my faith, I ask for boldness to shine, and I yield my life to glorify You. Amen.",
+      image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Hebrews 13:5 - Never will I leave you; never will I forsake you.",
+      prayer: "Lord, I praise Your faithful presence, I repent for feeling alone, I ask for reassurance, and I yield to Your comforting love. Amen.",
+      image: "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "2 Timothy 1:7 - For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.",
+      prayer: "Holy Spirit, I praise Your power in me, I repent for timidity, I ask for boldness, love, and discipline, and I yield my fears to You. Amen.",
+      image: "https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "Psalm 118:24 - This is the day the Lord has made; let us rejoice and be glad in it.",
+      prayer: "Lord, I praise You for this precious day, I repent for wasting time, I ask for joy and gratitude, and I yield my attitude to Your grace. Amen.",
+      image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      verse: "James 1:5 - If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault.",
+      prayer: "Father, I praise You as the giver of wisdom, I repent for foolish decisions, I ask for guidance, and I yield my plans to Your insight. Amen.",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
+    }
   ];
 
   function displayRandomVerse() {
@@ -226,12 +333,10 @@
 
     document.getElementById("verse").textContent = verseData.verse;
     document.getElementById("prayer").textContent = verseData.prayer;
-
-    const randomImage = bibleImages[Math.floor(Math.random() * bibleImages.length)];
     const imgElement = document.getElementById("bible-image");
-    imgElement.src = randomImage;
+    imgElement.src = verseData.image;
     imgElement.onerror = () => {
-      imgElement.src = bibleImages[Math.floor(Math.random() * bibleImages.length)];
+      imgElement.src = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80";
     };
   }
 
