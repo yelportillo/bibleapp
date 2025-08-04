@@ -6,7 +6,6 @@
 <title>Bible App</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-
   body {
     font-family: 'Open Sans', Arial, sans-serif;
     background-color: #f4f4f4;
@@ -21,6 +20,7 @@
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
     max-width: 600px;
     margin: auto;
+    position: relative;
   }
   h2 {
     font-weight: 700;
@@ -30,6 +30,7 @@
     font-weight: 400;
     font-size: 1.2rem;
     margin: 15px 0 8px;
+    white-space: pre-wrap;
   }
   #prayer {
     font-style: italic;
@@ -161,7 +162,7 @@
 <body>
 
 <div id="container">
-  <div style="position: relative;">
+  <div>
     <div class="menu" onclick="toggleMenu()">☰</div>
     <ul class="menu-items" id="menu-items">
       <li onclick="switchTab('verseTab')">Verse of the Day</li>
@@ -172,14 +173,14 @@
   <div id="verseTab" class="tab active">
     <h2>Verse of the Day</h2>
     <p id="date"></p>
-    <p id="verse"></p>
+    <p id="verse">Loading verse...</p>
     <p id="prayer"></p>
     <button onclick="generateVerse()">Generate New Verse</button>
   </div>
 
   <div id="prayerTab" class="tab">
     <h2>Prayer Wall</h2>
-    <input type="text" id="name" placeholder="Your Name (Optional)" />
+    <input type="text" id="name" placeholder="Your Name (Optional)" autocomplete="off" />
     <textarea id="prayerInput" placeholder="Write your prayer here..."></textarea>
     <button onclick="submitPrayer()">Submit Prayer</button>
     <div id="prayer-list"></div>
@@ -187,6 +188,28 @@
 </div>
 
 <script>
+  const books = [
+    "genesis","exodus","leviticus","numbers","deuteronomy",
+    "joshua","judges","ruth","1-samuel","2-samuel",
+    "1-kings","2-kings","1-chronicless","2-chronicless","ezra",
+    "nehemiah","esther","job","psalms","proverbs",
+    "ecclesiastes","song-of-songs","isaiah","jeremiah","lamentations",
+    "ezekiel","daniel","hosea","joel","amos",
+    "obadiah","jonah","micah","nahum","habakkuk",
+    "zephaniah","haggai","zechariah","malachi","matthew",
+    "mark","luke","john","acts","romans",
+    "1-corinthians","2-corinthians","galatians","ephesians","philippians",
+    "colossians","1-thessalonians","2-thessalonians","1-timothy","2-timothy",
+    "titus","philemon","hebrews","james","1-peter",
+    "2-peter","1-john","2-john","3-john","jude","revelation"
+  ];
+
+  // Max chapter counts for few popular books (simple approx for demo)
+  const chapters = {
+    genesis: 50, exodus: 40, psalms: 150, proverbs: 31, john: 21, romans: 16, 
+    matthew: 28, mark: 16, luke: 24, acts: 28, revelation: 22
+  };
+
   function toggleMenu() {
     const menu = document.getElementById("menu-items");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
@@ -204,43 +227,73 @@
     document.getElementById("date").innerText = today.toLocaleDateString("en-US", options);
   }
 
-  // Bible verses and related prayers without arrays (logic with if/else)
-  function generateVerse() {
-    const randomNum = Math.floor(Math.random() * 9) + 1;
-    let verseText = "";
-    let prayerText = "";
+  // Get random integer between min and max inclusive
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
-    if (randomNum === 1) {
-      verseText = "John 3:16 - For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.";
-      prayerText = "Lord, thank You for Your love and salvation. Amen.";
-    } else if (randomNum === 2) {
-      verseText = "Psalm 23:4 - Even though I walk through the darkest valley, I will fear no evil, for You are with me; Your rod and Your staff, they comfort me.";
-      prayerText = "God, walk with me in my darkest valleys. Amen.";
-    } else if (randomNum === 3) {
-      verseText = "Romans 8:28 - And we know that in all things God works for the good of those who love him, who have been called according to his purpose.";
-      prayerText = "Father, I trust You are working everything for my good. Amen.";
-    } else if (randomNum === 4) {
-      verseText = "Proverbs 3:5 - Trust in the Lord with all your heart and lean not on your own understanding.";
-      prayerText = "Teach me to trust in You fully. Amen.";
-    } else if (randomNum === 5) {
-      verseText = "Matthew 11:28 - Come to me, all you who are weary and burdened, and I will give you rest.";
-      prayerText = "Jesus, give me rest in Your presence. Amen.";
-    } else if (randomNum === 6) {
-      verseText = "Isaiah 41:10 - Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you.";
-      prayerText = "Lord, remove my fear and strengthen my faith. Amen.";
-    } else if (randomNum === 7) {
-      verseText = "Philippians 4:6 - Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.";
-      prayerText = "Calm my heart and help me bring everything to You in prayer. Amen.";
-    } else if (randomNum === 8) {
-      verseText = "Joshua 1:9 - Be strong and courageous. Do not be afraid; do not be discouraged, for the LORD your God will be with you wherever you go.";
-      prayerText = "Give me courage knowing You are with me. Amen.";
-    } else if (randomNum === 9) {
-      verseText = "Hebrews 11:1 - Now faith is confidence in what we hope for and assurance about what we do not see.";
-      prayerText = "Increase my faith to trust in Your unseen plans. Amen.";
+  async function generateVerse() {
+    document.getElementById("verse").innerText = "Loading verse...";
+    document.getElementById("prayer").innerText = "";
+
+    // Pick a random book from books[]
+    const book = books[randInt(0, books.length - 1)];
+    // Pick a chapter - if known in chapters dict, else random 1-40
+    const maxCh = chapters[book] || 40;
+    const chapter = randInt(1, maxCh);
+
+    // Fetch the chapter data to get number of verses
+    try {
+      // Fetch chapter to find verse count (using Bible API)
+      // bible-api.com/{book}+{chapter}
+      const response = await fetch(`https://bible-api.com/${book}+${chapter}`);
+      if (!response.ok) throw new Error("API error");
+      const data = await response.json();
+      const versesCount = data.verses.length;
+      // Pick random verse number in chapter
+      const verseNum = randInt(1, versesCount);
+
+      // Fetch the actual verse
+      const verseResponse = await fetch(`https://bible-api.com/${book}+${chapter}:${verseNum}`);
+      if (!verseResponse.ok) throw new Error("API error");
+      const verseData = await verseResponse.json();
+
+      // Display verse text (include reference)
+      const reference = verseData.reference;
+      const text = verseData.text.trim();
+
+      document.getElementById("verse").innerText = `${reference} - ${text}`;
+
+      // Generate related prayer based on verse content (simple keyword checks)
+      const lowerText = text.toLowerCase();
+
+      let prayer = "Lord, bless this word and guide us always. Amen.";
+
+      if (lowerText.includes("love")) {
+        prayer = "Lord, thank You for Your unconditional love. Amen.";
+      } else if (lowerText.includes("fear")) {
+        prayer = "God, take away my fear and fill me with Your peace. Amen.";
+      } else if (lowerText.includes("trust")) {
+        prayer = "Teach me to trust You fully and walk in faith. Amen.";
+      } else if (lowerText.includes("strength") || lowerText.includes("strong")) {
+        prayer = "Lord, give me strength to overcome every challenge. Amen.";
+      } else if (lowerText.includes("peace")) {
+        prayer = "Jesus, fill my heart with Your peace that surpasses all understanding. Amen.";
+      } else if (lowerText.includes("joy")) {
+        prayer = "Father, fill me with Your joy and gladness. Amen.";
+      } else if (lowerText.includes("faith")) {
+        prayer = "Increase my faith to trust in Your promises. Amen.";
+      } else if (lowerText.includes("hope")) {
+        prayer = "God, renew my hope and keep my eyes on You. Amen.";
+      }
+
+      document.getElementById("prayer").innerText = prayer;
+
+    } catch (error) {
+      document.getElementById("verse").innerText = "Could not load verse. Please try again.";
+      document.getElementById("prayer").innerText = "";
+      console.error(error);
     }
-
-    document.getElementById("verse").innerText = verseText;
-    document.getElementById("prayer").innerText = prayerText;
   }
 
   function submitPrayer() {
