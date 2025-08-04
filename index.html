@@ -161,7 +161,7 @@
     <p id="date"></p>
     <p id="verse">Loading verse...</p>
     <p id="prayer"></p>
-    <img id="bible-image" alt="Bible Image" />
+    <img id="bible-image" src="media/bible.jpeg" alt="Bible Image" />
     <button onclick="fetchRandomVerse()">Generate New Verse</button>
   </div>
 
@@ -194,7 +194,6 @@
     "3 John", "Jude", "Revelation"
   ];
 
-  // Max chapters for a few example books (partial, for demo)
   const bookChapters = {
     "Genesis": 50,
     "Exodus": 40,
@@ -204,10 +203,8 @@
     "Matthew": 28,
     "Luke": 24,
     "Revelation": 22,
-    // You can add more for more precise randomization
   };
 
-  // Get random integer between min and max inclusive
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
@@ -221,31 +218,24 @@
     if (bookChapters[book]) {
       return randInt(1, bookChapters[book]);
     }
-    // fallback assume max 30 chapters
     return randInt(1, 30);
   }
 
-  // Fetch random verse from bible-api.com
   async function fetchRandomVerse() {
     document.getElementById('verse').textContent = "Loading verse...";
     document.getElementById('prayer').textContent = "";
-    document.getElementById('bible-image').src = "";
 
     let book = getRandomBook();
     let chapter = getRandomChapter(book);
 
-    // Bible API URL format: https://bible-api.com/John%203:16
-    // We'll just fetch chapter 1 verse 1 as placeholder then parse verses length to pick random verse, because the API doesn't support random verse query.
-    // So we do a trick: fetch a whole chapter, then pick a random verse from the response verses.
     try {
       const url = `https://bible-api.com/${encodeURIComponent(book)}%20${chapter}`;
       const response = await fetch(url);
-      if (!response.ok) throw new Error("Network response was not ok");
+      if (!response.ok) throw new Error("Network error");
       const data = await response.json();
 
       if (!data.verses || data.verses.length === 0) throw new Error("No verses found");
 
-      // Pick random verse from this chapter
       const verseIndex = randInt(0, data.verses.length - 1);
       const verseObj = data.verses[verseIndex];
 
@@ -253,23 +243,20 @@
 
       document.getElementById('verse').textContent = verseText;
 
-      // Generate prayer based on book name length mod 5 (simple non-array logic)
       const prayerText = generatePrayer(book.length % 5);
       document.getElementById('prayer').textContent = prayerText;
 
-      // Show random bible image
-      document.getElementById('bible-image').src = getRandomBibleImage();
+      // Always use local image
+      document.getElementById('bible-image').src = "media/bible.jpeg";
 
     } catch (err) {
       document.getElementById('verse').textContent = "Failed to load verse. Please try again.";
       document.getElementById('prayer').textContent = "";
-      document.getElementById('bible-image').src = "";
       console.error(err);
     }
   }
 
   function generatePrayer(selector) {
-    // selector is a number 0-4, no arrays, use switch
     switch(selector) {
       case 0:
         return "Lord, guide me through Your Word and keep me close to Your truth. Amen.";
@@ -286,46 +273,29 @@
     }
   }
 
-  // Random Bible images (curated)
-  function getRandomBibleImage() {
-    const images = [
-      "https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg",
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1529253355930-cdb5f98c5d92?auto=format&fit=crop&w=800&q=80"
-    ];
-    const idx = randInt(0, images.length - 1);
-    return images[idx];
-  }
-
-  // Toggle menu dropdown
   function toggleMenu() {
     const menu = document.getElementById('menu-items');
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
   }
 
-  // Show Verse Tab and hide Prayer Tab
   function showVerseTab() {
     document.getElementById('verseTab').style.display = 'block';
     document.getElementById('prayerTab').style.display = 'none';
     document.getElementById('menu-items').style.display = 'none';
   }
-  // Show Prayer Tab and hide Verse Tab
+
   function showPrayerTab() {
     document.getElementById('prayerTab').style.display = 'block';
     document.getElementById('verseTab').style.display = 'none';
     document.getElementById('menu-items').style.display = 'none';
   }
 
-  // Set date nicely formatted
   function displayDate() {
     const today = new Date();
     const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
     document.getElementById('date').textContent = today.toLocaleDateString('en-US', options);
   }
 
-  // Save prayers in localStorage
   function submitPrayer() {
     const nameInput = document.getElementById('name').value.trim();
     const prayerInput = document.getElementById('prayerInput').value.trim();
@@ -355,12 +325,10 @@
 
     displayPrayers();
 
-    // Clear inputs
     document.getElementById('name').value = '';
     document.getElementById('prayerInput').value = '';
   }
 
-  // Display saved prayers below the form
   function displayPrayers() {
     const list = document.getElementById('prayer-list');
     list.innerHTML = '';
@@ -380,7 +348,6 @@
     });
   }
 
-  // Simple HTML escape
   function escapeHtml(text) {
     const map = {
       '&': '&amp;',
