@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Bible App by Yel Portillo</title>
 <meta property="og:title" content="Bible App by Yel Portillo" />
-<meta property="og:description" content="Get a random Bible verse and relatable prayer every day." />
-<meta property="og:image" content="media/bible.jpeg" />
-<meta property="og:url" content="https://yelportillo.github.io/bibleapp/" />
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:description" content="Read a random Bible verse with a relatable prayer and prayer wall." />
+<meta property="og:image" content="https://images.unsplash.com/photo-1520975922038-6c4be3f0b6b3" />
+<meta property="og:type" content="website" />
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
   body {
@@ -166,7 +166,7 @@
     <p id="date"></p>
     <p id="verse">Loading verse...</p>
     <p id="prayer"></p>
-    <img id="bible-image" src="media/bible.jpeg" alt="Bible Image" />
+    <img id="bible-image" alt="Bible Image" />
     <button onclick="fetchRandomVerse()">Generate New Verse</button>
   </div>
 
@@ -176,24 +176,42 @@
     <input id="name" placeholder="Your Name (optional)" />
     <textarea id="prayerInput" placeholder="Write your prayer here..."></textarea>
     <button onclick="submitPrayer()">Submit Prayer</button>
+
     <div id="prayer-list"></div>
   </div>
 </div>
 
 <script>
   const bibleBooks = [
-    "Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel",
-    "1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Proverbs",
-    "Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel",
-    "Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi",
-    "Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians",
-    "Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus",
-    "Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"
+    "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
+    "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
+    "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles",
+    "Ezra", "Nehemiah", "Esther", "Job", "Psalms",
+    "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah",
+    "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea",
+    "Joel", "Amos", "Obadiah", "Jonah", "Micah",
+    "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah",
+    "Malachi", "Matthew", "Mark", "Luke", "John",
+    "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians",
+    "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
+    "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews",
+    "James", "1 Peter", "2 Peter", "1 John", "2 John",
+    "3 John", "Jude", "Revelation"
   ];
 
   const bookChapters = {
-    "Genesis": 50,"Exodus": 40,"Psalms": 150,"John": 21,"Romans": 16,"Matthew": 28,"Luke": 24,"Revelation": 22,
+    "Genesis": 50, "Exodus": 40, "Psalms": 150,
+    "John": 21, "Romans": 16, "Matthew": 28,
+    "Luke": 24, "Revelation": 22
   };
+
+  const bibleImages = [
+    "https://images.unsplash.com/photo-1520975922038-6c4be3f0b6b3",
+    "https://images.unsplash.com/photo-1542326237-94f8b21aa61f",
+    "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7",
+    "https://images.unsplash.com/photo-1508780709619-79562169bc64",
+    "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e"
+  ];
 
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -207,16 +225,19 @@
     return bookChapters[book] ? randInt(1, bookChapters[book]) : randInt(1, 30);
   }
 
+  function getRandomBibleImage() {
+    return bibleImages[randInt(0, bibleImages.length - 1)];
+  }
+
   async function fetchRandomVerse() {
     document.getElementById('verse').textContent = "Loading verse...";
     document.getElementById('prayer').textContent = "";
 
-    let book = getRandomBook();
-    let chapter = getRandomChapter(book);
+    const book = getRandomBook();
+    const chapter = getRandomChapter(book);
 
     try {
-      const url = `https://bible-api.com/${encodeURIComponent(book)}%20${chapter}`;
-      const response = await fetch(url);
+      const response = await fetch(`https://bible-api.com/${encodeURIComponent(book)}%20${chapter}`);
       if (!response.ok) throw new Error("Network error");
       const data = await response.json();
 
@@ -227,7 +248,8 @@
 
       document.getElementById('verse').textContent = verseText;
       document.getElementById('prayer').textContent = generatePrayer();
-      document.getElementById('bible-image').src = "media/bible.jpeg";
+      document.getElementById('bible-image').src = getRandomBibleImage();
+
     } catch (err) {
       console.error(err);
       document.getElementById('verse').textContent = "Failed to load verse. Retrying...";
@@ -265,14 +287,12 @@
 
   function displayDate() {
     const today = new Date();
-    const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-    document.getElementById('date').textContent = today.toLocaleDateString('en-US', options);
+    document.getElementById('date').textContent = today.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
   }
 
   function submitPrayer() {
     const nameInput = document.getElementById('name').value.trim();
     const prayerInput = document.getElementById('prayerInput').value.trim();
-
     if (!prayerInput) {
       alert("Please enter your prayer before submitting.");
       return;
@@ -284,6 +304,7 @@
     const time = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true });
 
     const newPrayer = { name, prayer: prayerInput, date, time };
+
     let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
     prayers.unshift(newPrayer);
     localStorage.setItem('prayers', JSON.stringify(prayers));
@@ -296,7 +317,7 @@
   function displayPrayers() {
     const list = document.getElementById('prayer-list');
     list.innerHTML = '';
-    let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
+    const prayers = JSON.parse(localStorage.getItem('prayers')) || [];
 
     prayers.forEach(p => {
       const div = document.createElement('div');
@@ -321,5 +342,6 @@
     displayPrayers();
   };
 </script>
+
 </body>
 </html>
