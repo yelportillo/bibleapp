@@ -6,7 +6,7 @@
 <title>Bible App by Yel Portillo</title>
 <meta property="og:title" content="Bible App by Yel Portillo">
 <meta property="og:description" content="Read random Bible verses and submit prayers.">
-<meta property="og:image" content="https://source.unsplash.com/600x400/?bible,church,faith">
+<meta property="og:image" content="https://source.unsplash.com/600x400/?bible,faith,church">
 <meta property="og:url" content="https://yelportillo.github.io/bibleapp/">
 <meta name="twitter:card" content="summary_large_image">
 
@@ -167,7 +167,7 @@
     <p id="date"></p>
     <p id="verse">Loading verse...</p>
     <p id="prayer"></p>
-    <img id="bible-image" src="https://source.unsplash.com/600x400/?bible,church,faith" alt="Bible Image" />
+    <img id="bible-image" src="https://source.unsplash.com/600x400/?bible,faith,church" alt="Bible Image" />
     <button onclick="fetchRandomVerse()">Generate New Verse</button>
   </div>
 
@@ -236,7 +236,14 @@
 
       document.getElementById('verse').textContent = `${book} ${verseObj.chapter}:${verseObj.verse} - ${verseObj.text.trim()}`;
       document.getElementById('prayer').textContent = generatePrayer(book.length % 5);
-      document.getElementById('bible-image').src = `https://source.unsplash.com/600x400/?bible,faith,church&sig=${Math.random()}`;
+
+      // Always generate a unique Unsplash URL
+      const img = document.getElementById('bible-image');
+      img.src = `https://source.unsplash.com/600x400/?bible,faith,church&sig=${Date.now()}`;
+      img.onerror = () => {
+        img.src = "https://images.unsplash.com/photo-1502920917128-1aa500764b8a"; // fallback image
+      };
+
     } catch (err) {
       if (retries > 0) {
         fetchRandomVerse(retries - 1);
