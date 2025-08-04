@@ -155,17 +155,15 @@
     <li onclick="showPrayerTab()">Prayer Wall</li>
   </ul>
 
-  <!-- Verse of the Day Section -->
   <div id="verseTab">
     <h2>Verse of the Day</h2>
     <p id="date"></p>
     <p id="verse">Loading verse...</p>
     <p id="prayer"></p>
-    <img id="bible-image" src="media/bible.jpeg" alt="Bible Image" />
+    <img id="bible-image" src="" alt="Bible Image" />
     <button onclick="displayRandomVerse()">Generate New Verse</button>
   </div>
 
-  <!-- Prayer Wall Section -->
   <div id="prayerTab" style="display:none;">
     <h2>Prayer Wall</h2>
     <input id="name" placeholder="Your Name (optional)" />
@@ -177,16 +175,40 @@
 
 <script>
   const verses = [
-    { verse: "John 3:16 - For God so loved the world that He gave His one and only Son...", prayer: "Lord, I praise You for Your incredible love... Amen." },
-    { verse: "Philippians 4:13 - I can do all things through Christ who strengthens me.", prayer: "Father, I praise You for being my strength... Amen." },
-    { verse: "Psalm 23:1 - The Lord is my shepherd, I shall not want.", prayer: "Lord, I praise You as my shepherd... Amen." },
-    { verse: "Romans 8:28 - All things work together for good for those who love God.", prayer: "God, I praise You for working all things for good... Amen." },
-    { verse: "Isaiah 41:10 - Fear not, for I am with you...", prayer: "Father, I praise You for being my strength... Amen." },
-    { verse: "Proverbs 3:5 - Trust in the Lord with all your heart...", prayer: "Lord, I praise You for being wise and faithful... Amen." }
+    { verse: "John 3:16 - For God so loved the world that He gave His one and only Son...", prayer: "Lord, I praise You for Your endless love, I repent of my sins, I ask for Your guidance, and I yield my life to Your will. Amen." },
+    { verse: "Philippians 4:13 - I can do all things through Christ who strengthens me.", prayer: "Father, I praise You for being my strength, I repent for doubting, I ask for courage, and I yield to Your perfect plan. Amen." },
+    { verse: "Psalm 23:1 - The Lord is my shepherd, I shall not want.", prayer: "Lord, I praise You for Your care, I repent for my fears, I ask for peace, and I yield to Your guidance. Amen." },
+    { verse: "Romans 8:28 - All things work together for good for those who love God.", prayer: "God, I praise You for Your wisdom, I repent for my impatience, I ask for faith, and I yield to Your purpose. Amen." },
+    { verse: "Isaiah 41:10 - Fear not, for I am with you.", prayer: "Father, I praise You for being near, I repent for my anxiety, I ask for comfort, and I yield to Your strength. Amen." },
+    { verse: "Proverbs 3:5 - Trust in the Lord with all your heart.", prayer: "Lord, I praise You for Your faithfulness, I repent for leaning on myself, I ask for trust, and I yield to Your will. Amen." },
+    { verse: "Matthew 11:28 - Come to me, all who are weary.", prayer: "Jesus, I praise You for Your rest, I repent for carrying my burdens alone, I ask for peace, and I yield to Your comfort. Amen." },
+    { verse: "Jeremiah 29:11 - For I know the plans I have for you.", prayer: "God, I praise You for Your plans, I repent for doubting, I ask for hope, and I yield to Your timing. Amen." },
+    { verse: "Psalm 46:10 - Be still and know that I am God.", prayer: "Lord, I praise You for Your power, I repent for my worry, I ask for stillness, and I yield to Your presence. Amen." },
+    { verse: "Ephesians 2:8 - For by grace you have been saved.", prayer: "Father, I praise You for Your grace, I repent of my pride, I ask for humility, and I yield to Your mercy. Amen." },
+    { verse: "2 Corinthians 5:7 - We walk by faith, not by sight.", prayer: "Lord, I praise You for leading me, I repent for my doubt, I ask for stronger faith, and I yield to Your guidance. Amen." },
+    { verse: "Psalm 119:105 - Your word is a lamp to my feet.", prayer: "God, I praise You for Your Word, I repent for neglecting it, I ask for wisdom, and I yield to Your truth. Amen." },
+    { verse: "1 Peter 5:7 - Cast all your anxiety on Him.", prayer: "Lord, I praise You for carrying my cares, I repent for holding onto fear, I ask for peace, and I yield to Your care. Amen." },
+    { verse: "Romans 12:2 - Be transformed by the renewing of your mind.", prayer: "God, I praise You for new life, I repent of old ways, I ask for renewal, and I yield to Your Spirit. Amen." },
+    { verse: "Matthew 5:16 - Let your light shine before others.", prayer: "Father, I praise You for Your light, I repent for hiding my faith, I ask for boldness, and I yield to Your calling. Amen." },
+    { verse: "Joshua 1:9 - Be strong and courageous.", prayer: "Lord, I praise You for Your strength, I repent for my fear, I ask for courage, and I yield to Your power. Amen." },
+    { verse: "Hebrews 11:1 - Faith is confidence in what we hope for.", prayer: "God, I praise You for hope, I repent for my doubts, I ask for greater faith, and I yield to Your promises. Amen." },
+    { verse: "Colossians 3:23 - Work heartily for the Lord.", prayer: "Lord, I praise You for purpose, I repent for laziness, I ask for diligence, and I yield my work to You. Amen." },
+    { verse: "John 14:6 - I am the way, the truth, and the life.", prayer: "Jesus, I praise You for being my Savior, I repent for wandering, I ask for direction, and I yield to Your way. Amen." },
+    { verse: "Galatians 5:22 - The fruit of the Spirit is love, joy, peace.", prayer: "Father, I praise You for Your Spirit, I repent for my anger, I ask for love, and I yield to Your peace. Amen." },
+    { verse: "Psalm 34:8 - Taste and see that the Lord is good.", prayer: "God, I praise You for Your goodness, I repent for my ingratitude, I ask for contentment, and I yield to Your care. Amen." },
+    { verse: "1 John 4:19 - We love because He first loved us.", prayer: "Lord, I praise You for loving me first, I repent for withholding love, I ask for compassion, and I yield to Your example. Amen." },
+    { verse: "James 1:5 - If any of you lacks wisdom, ask God.", prayer: "God, I praise You for Your wisdom, I repent for relying on myself, I ask for understanding, and I yield to Your counsel. Amen." },
+    { verse: "Psalm 37:4 - Delight yourself in the Lord.", prayer: "Father, I praise You for Your joy, I repent for seeking happiness elsewhere, I ask for delight, and I yield to Your will. Amen." },
+    { verse: "Romans 10:9 - If you declare Jesus is Lord, you will be saved.", prayer: "Lord, I praise You for salvation, I repent for my sins, I ask for Your forgiveness, and I yield to Your Lordship. Amen." },
+    { verse: "Isaiah 40:31 - Those who hope in the Lord will renew their strength.", prayer: "God, I praise You for new strength, I repent for my impatience, I ask for endurance, and I yield to Your timing. Amen." },
+    { verse: "Matthew 28:20 - I am with you always.", prayer: "Jesus, I praise You for Your presence, I repent for feeling alone, I ask for comfort, and I yield to Your nearness. Amen." },
+    { verse: "Psalm 91:2 - He is my refuge and my fortress.", prayer: "Lord, I praise You for Your protection, I repent for my fear, I ask for safety, and I yield to Your shelter. Amen." },
+    { verse: "John 8:12 - I am the light of the world.", prayer: "Jesus, I praise You for being the light, I repent for walking in darkness, I ask for clarity, and I yield to Your truth. Amen." },
+    { verse: "Revelation 21:4 - He will wipe every tear from their eyes.", prayer: "Father, I praise You for Your comfort, I repent for my despair, I ask for hope, and I yield to Your eternal promise. Amen." }
   ];
 
   const bibleImages = [
-    "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d", 
+    "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d",
     "https://images.unsplash.com/photo-1501612780327-45045538702b",
     "https://images.unsplash.com/photo-1603791452906-bb3f14f6e731",
     "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e",
@@ -208,7 +230,6 @@
     const randomImage = bibleImages[Math.floor(Math.random() * bibleImages.length)];
     const imgElement = document.getElementById("bible-image");
     imgElement.src = randomImage;
-
     imgElement.onerror = () => {
       imgElement.src = bibleImages[Math.floor(Math.random() * bibleImages.length)];
     };
