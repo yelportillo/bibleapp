@@ -4,6 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Bible App by Yel Portillo</title>
+<meta property="og:title" content="Bible App by Yel Portillo" />
+<meta property="og:description" content="Get a random Bible verse and relatable prayer every day." />
+<meta property="og:image" content="media/bible.jpeg" />
+<meta property="og:url" content="https://yelportillo.github.io/bibleapp/" />
+<meta name="twitter:card" content="summary_large_image">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
   body {
@@ -171,38 +176,23 @@
     <input id="name" placeholder="Your Name (optional)" />
     <textarea id="prayerInput" placeholder="Write your prayer here..."></textarea>
     <button onclick="submitPrayer()">Submit Prayer</button>
-
     <div id="prayer-list"></div>
   </div>
 </div>
 
 <script>
   const bibleBooks = [
-    "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
-    "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
-    "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles",
-    "Ezra", "Nehemiah", "Esther", "Job", "Psalms",
-    "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah",
-    "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea",
-    "Joel", "Amos", "Obadiah", "Jonah", "Micah",
-    "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah",
-    "Malachi", "Matthew", "Mark", "Luke", "John",
-    "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians",
-    "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
-    "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews",
-    "James", "1 Peter", "2 Peter", "1 John", "2 John",
-    "3 John", "Jude", "Revelation"
+    "Genesis","Exodus","Leviticus","Numbers","Deuteronomy","Joshua","Judges","Ruth","1 Samuel","2 Samuel",
+    "1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra","Nehemiah","Esther","Job","Psalms","Proverbs",
+    "Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations","Ezekiel","Daniel","Hosea","Joel",
+    "Amos","Obadiah","Jonah","Micah","Nahum","Habakkuk","Zephaniah","Haggai","Zechariah","Malachi",
+    "Matthew","Mark","Luke","John","Acts","Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians",
+    "Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy","Titus",
+    "Philemon","Hebrews","James","1 Peter","2 Peter","1 John","2 John","3 John","Jude","Revelation"
   ];
 
   const bookChapters = {
-    "Genesis": 50,
-    "Exodus": 40,
-    "Psalms": 150,
-    "John": 21,
-    "Romans": 16,
-    "Matthew": 28,
-    "Luke": 24,
-    "Revelation": 22,
+    "Genesis": 50,"Exodus": 40,"Psalms": 150,"John": 21,"Romans": 16,"Matthew": 28,"Luke": 24,"Revelation": 22,
   };
 
   function randInt(min, max) {
@@ -210,15 +200,11 @@
   }
 
   function getRandomBook() {
-    const idx = randInt(0, bibleBooks.length - 1);
-    return bibleBooks[idx];
+    return bibleBooks[randInt(0, bibleBooks.length - 1)];
   }
 
   function getRandomChapter(book) {
-    if (bookChapters[book]) {
-      return randInt(1, bookChapters[book]);
-    }
-    return randInt(1, 30);
+    return bookChapters[book] ? randInt(1, bookChapters[book]) : randInt(1, 30);
   }
 
   async function fetchRandomVerse() {
@@ -236,41 +222,28 @@
 
       if (!data.verses || data.verses.length === 0) throw new Error("No verses found");
 
-      const verseIndex = randInt(0, data.verses.length - 1);
-      const verseObj = data.verses[verseIndex];
-
+      const verseObj = data.verses[randInt(0, data.verses.length - 1)];
       const verseText = `${book} ${verseObj.chapter}:${verseObj.verse} - ${verseObj.text.trim()}`;
 
       document.getElementById('verse').textContent = verseText;
-
-      const prayerText = generatePrayer(book.length % 5);
-      document.getElementById('prayer').textContent = prayerText;
-
-      // Always use local image
+      document.getElementById('prayer').textContent = generatePrayer();
       document.getElementById('bible-image').src = "media/bible.jpeg";
-
     } catch (err) {
-      document.getElementById('verse').textContent = "Failed to load verse. Please try again.";
-      document.getElementById('prayer').textContent = "";
       console.error(err);
+      document.getElementById('verse').textContent = "Failed to load verse. Retrying...";
+      setTimeout(fetchRandomVerse, 2000);
     }
   }
 
-  function generatePrayer(selector) {
-    switch(selector) {
-      case 0:
-        return "Lord, guide me through Your Word and keep me close to Your truth. Amen.";
-      case 1:
-        return "Father, help me live in Your light and trust Your plan for me. Amen.";
-      case 2:
-        return "God, strengthen my faith and fill my heart with Your peace. Amen.";
-      case 3:
-        return "Jesus, be my rock and refuge in every trial. Amen.";
-      case 4:
-        return "Holy Spirit, lead me and teach me to follow Your ways. Amen.";
-      default:
-        return "Lord, hear my prayer and bless my soul. Amen.";
-    }
+  function generatePrayer() {
+    const prayers = [
+      "Lord, guide me through Your Word and keep me close to Your truth. Amen.",
+      "Father, help me live in Your light and trust Your plan for me. Amen.",
+      "God, strengthen my faith and fill my heart with Your peace. Amen.",
+      "Jesus, be my rock and refuge in every trial. Amen.",
+      "Holy Spirit, lead me and teach me to follow Your ways. Amen."
+    ];
+    return prayers[randInt(0, prayers.length - 1)];
   }
 
   function toggleMenu() {
@@ -307,24 +280,15 @@
 
     const name = nameInput || "Anonymous";
     const now = new Date();
-    const dateOptions = { year:'numeric', month:'long', day:'numeric' };
-    const timeOptions = { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true };
-    const date = now.toLocaleDateString('en-US', dateOptions);
-    const time = now.toLocaleTimeString('en-US', timeOptions);
+    const date = now.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+    const time = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true });
 
-    const newPrayer = {
-      name: name,
-      prayer: prayerInput,
-      date: date,
-      time: time
-    };
-
+    const newPrayer = { name, prayer: prayerInput, date, time };
     let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
     prayers.unshift(newPrayer);
     localStorage.setItem('prayers', JSON.stringify(prayers));
 
     displayPrayers();
-
     document.getElementById('name').value = '';
     document.getElementById('prayerInput').value = '';
   }
@@ -332,13 +296,11 @@
   function displayPrayers() {
     const list = document.getElementById('prayer-list');
     list.innerHTML = '';
-
     let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
 
     prayers.forEach(p => {
       const div = document.createElement('div');
       div.className = 'prayer-item';
-
       div.innerHTML = `
         <div class="prayer-name">${escapeHtml(p.name)}</div>
         <div class="prayer-text">${escapeHtml(p.prayer)}</div>
@@ -349,13 +311,7 @@
   }
 
   function escapeHtml(text) {
-    const map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
-    };
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
     return text.replace(/[&<>"']/g, m => map[m]);
   }
 
@@ -365,6 +321,5 @@
     displayPrayers();
   };
 </script>
-
 </body>
 </html>
