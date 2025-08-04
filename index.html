@@ -45,18 +45,11 @@
 
         /* Hamburger Menu */
         .menu {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
+            position: fixed;
+            top: 15px;
+            right: 20px;
             font-size: 26px;
             color: #333;
-            background-color: white;
-            padding: 10px 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            position: fixed;
-            top: 10px;
-            right: 10px;
             cursor: pointer;
             z-index: 20;
         }
@@ -64,14 +57,15 @@
         .menu-items {
             display: none;
             position: absolute;
-            top: 55px;
-            right: 10px;
+            top: 45px;
+            right: 0;
             background: white;
-            border-radius: 8px;
+            border-radius: 5px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             list-style: none;
             padding: 10px 0;
             width: 180px;
+            text-align: left;
             z-index: 21;
         }
 
@@ -143,11 +137,12 @@
 </head>
 <body>
     <!-- Hamburger Menu -->
-    <div class="menu" onclick="toggleMenu()">☰</div>
-    <ul class="menu-items">
-        <li onclick="switchTab('verseTab')">Verse of the Day</li>
-        <li onclick="switchTab('prayerTab')">Prayer Wall</li>
-    </ul>
+    <div class="menu" onclick="toggleMenu()">☰
+        <ul class="menu-items">
+            <li onclick="switchTab('verseTab')">Verse of the Day</li>
+            <li onclick="switchTab('prayerTab')">Prayer Wall</li>
+        </ul>
+    </div>
 
     <!-- Verse of the Day Section -->
     <div id="verseTab" class="tab active">
@@ -197,8 +192,6 @@
                 const verseText = `${data[0].bookname} ${data[0].chapter}:${data[0].verse} - ${data[0].text}`;
                 
                 document.getElementById("verse").innerText = verseText;
-
-                // Generate a relevant prayer based on the verse
                 document.getElementById("prayer").innerText = `Lord, help me to live according to ${data[0].bookname} ${data[0].chapter}:${data[0].verse} and trust in Your Word. Amen.`;
             } catch (error) {
                 document.getElementById("verse").innerText = "Unable to load verse. Please try again.";
