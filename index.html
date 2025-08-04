@@ -105,6 +105,7 @@
   }
   #name, #prayerInput {
     width: 100%;
+    max-width: 100%;
     margin-bottom: 12px;
     padding: 12px;
     border-radius: 8px;
@@ -160,8 +161,8 @@
     <p id="date"></p>
     <p id="verse">Loading verse...</p>
     <p id="prayer"></p>
-    <img id="bible-image" src="" alt="Bible Image" />
-    <button onclick="fetchRandomVerse()">Generate New Verse</button>
+    <img id="bible-image" src="media/bible.jpeg" alt="Bible Image" />
+    <button onclick="displayRandomVerse()">Generate New Verse</button>
   </div>
 
   <!-- Prayer Wall Section -->
@@ -175,71 +176,42 @@
 </div>
 
 <script>
-  const bibleVerses = [
-    { book: "John", chapter: 3, verse: 16, text: "For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life." },
-    { book: "Philippians", chapter: 4, verse: 13, text: "I can do all things through Christ who strengthens me." },
-    { book: "Psalm", chapter: 23, verse: 1, text: "The Lord is my shepherd; I shall not want." },
-    { book: "Romans", chapter: 8, verse: 28, text: "And we know that in all things God works for the good of those who love Him, who have been called according to His purpose." },
-    { book: "Isaiah", chapter: 41, verse: 10, text: "Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand." },
-    { book: "Proverbs", chapter: 3, verse: 5, text: "Trust in the Lord with all your heart and lean not on your own understanding." },
-    { book: "Matthew", chapter: 11, verse: 28, text: "Come to me, all you who are weary and burdened, and I will give you rest." },
-    { book: "Jeremiah", chapter: 29, verse: 11, text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future." }
+  const verses = [
+    { verse: "John 3:16 - For God so loved the world that He gave His one and only Son...", prayer: "Lord, I praise You for Your incredible love... Amen." },
+    { verse: "Philippians 4:13 - I can do all things through Christ who strengthens me.", prayer: "Father, I praise You for being my strength... Amen." },
+    { verse: "Psalm 23:1 - The Lord is my shepherd, I shall not want.", prayer: "Lord, I praise You as my shepherd... Amen." },
+    { verse: "Romans 8:28 - All things work together for good for those who love God.", prayer: "God, I praise You for working all things for good... Amen." },
+    { verse: "Isaiah 41:10 - Fear not, for I am with you...", prayer: "Father, I praise You for being my strength... Amen." },
+    { verse: "Proverbs 3:5 - Trust in the Lord with all your heart...", prayer: "Lord, I praise You for being wise and faithful... Amen." }
   ];
 
   const bibleImages = [
-    "https://images.unsplash.com/photo-1528701800489-20be9c1e94d7",
-    "https://images.unsplash.com/photo-1553729459-efe14ef6055d",
-    "https://images.unsplash.com/photo-1508780709619-79562169bc64",
-    "https://images.unsplash.com/photo-1580587771525-78b9dba3b914",
-    "https://images.unsplash.com/photo-1543269865-cbf427effbad",
-    "https://images.unsplash.com/photo-1519681393784-d120267933ba",
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+    "https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d", 
+    "https://images.unsplash.com/photo-1501612780327-45045538702b",
+    "https://images.unsplash.com/photo-1603791452906-bb3f14f6e731",
+    "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e",
+    "https://images.unsplash.com/photo-1584824486509-112e4181ff6b",
+    "https://images.unsplash.com/photo-1495653797063-114787b77b23",
+    "https://images.unsplash.com/photo-1549887534-7c84b20c1f3e",
+    "https://images.unsplash.com/photo-1551479877-3f0e8ef3f07f",
+    "https://images.unsplash.com/photo-1483721310020-03333e577078",
     "https://images.unsplash.com/photo-1473187983305-f615310e7daa"
   ];
 
-  function randInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  function displayRandomVerse() {
+    const randomIndex = Math.floor(Math.random() * verses.length);
+    const verseData = verses[randomIndex];
 
-  async function fetchRandomVerse() {
-    const verseObj = bibleVerses[randInt(0, bibleVerses.length - 1)];
-    document.getElementById('verse').textContent = "Loading verse...";
-    document.getElementById('prayer').textContent = "";
-    loadBibleImage();
+    document.getElementById("verse").textContent = verseData.verse;
+    document.getElementById("prayer").textContent = verseData.prayer;
 
-    try {
-      const url = `https://bible-api.com/${encodeURIComponent(verseObj.book)}+${verseObj.chapter}:${verseObj.verse}`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Network error");
-      const data = await response.json();
+    const randomImage = bibleImages[Math.floor(Math.random() * bibleImages.length)];
+    const imgElement = document.getElementById("bible-image");
+    imgElement.src = randomImage;
 
-      const text = data.text ? data.text.trim() : verseObj.text;
-      document.getElementById('verse').textContent = `${verseObj.book} ${verseObj.chapter}:${verseObj.verse} - ${text}`;
-      document.getElementById('prayer').textContent = generatePrayer(verseObj.book.length % 5);
-
-    } catch (err) {
-      console.warn("API failed, fallback to local verse");
-      document.getElementById('verse').textContent = `${verseObj.book} ${verseObj.chapter}:${verseObj.verse} - ${verseObj.text}`;
-      document.getElementById('prayer').textContent = generatePrayer(verseObj.book.length % 5);
-    }
-  }
-
-  function loadBibleImage() {
-    const img = document.getElementById('bible-image');
-    const randomImg = bibleImages[randInt(0, bibleImages.length - 1)];
-    img.src = randomImg;
-    img.onerror = () => loadBibleImage(); // retry if image fails
-  }
-
-  function generatePrayer(selector) {
-    switch(selector) {
-      case 0: return "Lord, guide me through Your Word and keep me close to Your truth. Amen.";
-      case 1: return "Father, help me live in Your light and trust Your plan for me. Amen.";
-      case 2: return "God, strengthen my faith and fill my heart with Your peace. Amen.";
-      case 3: return "Jesus, be my rock and refuge in every trial. Amen.";
-      case 4: return "Holy Spirit, lead me and teach me to follow Your ways. Amen.";
-      default: return "Lord, hear my prayer and bless my soul. Amen.";
-    }
+    imgElement.onerror = () => {
+      imgElement.src = bibleImages[Math.floor(Math.random() * bibleImages.length)];
+    };
   }
 
   function toggleMenu() {
@@ -268,6 +240,7 @@
   function submitPrayer() {
     const nameInput = document.getElementById('name').value.trim();
     const prayerInput = document.getElementById('prayerInput').value.trim();
+
     if (!prayerInput) {
       alert("Please enter your prayer before submitting.");
       return;
@@ -281,6 +254,7 @@
     const time = now.toLocaleTimeString('en-US', timeOptions);
 
     const newPrayer = { name, prayer: prayerInput, date, time };
+
     let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
     prayers.unshift(newPrayer);
     localStorage.setItem('prayers', JSON.stringify(prayers));
@@ -293,6 +267,7 @@
   function displayPrayers() {
     const list = document.getElementById('prayer-list');
     list.innerHTML = '';
+
     let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
     prayers.forEach(p => {
       const div = document.createElement('div');
@@ -313,7 +288,7 @@
 
   window.onload = () => {
     displayDate();
-    fetchRandomVerse();
+    displayRandomVerse();
     displayPrayers();
   };
 </script>
