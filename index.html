@@ -226,11 +226,11 @@
   }
 
   function fetchRandomVerse() {
-    const verseObj = verses[randomInt(verses.length)];
-    document.getElementById('verse').textContent = verseObj.text;
-    document.getElementById('prayer').textContent = verseObj.prayer;
-    document.getElementById('bible-image').src = images[randomInt(images.length)];
-  }
+  const verseObj = verses[randomInt(verses.length)];
+  document.getElementById('verse').textContent = `${verseObj.text} — ${verseObj.verse}`;
+  document.getElementById('prayer').textContent = verseObj.prayer;
+  document.getElementById('bible-image').src = images[randomInt(images.length)];
+}
 
   function toggleMenu() {
     const menu = document.getElementById('menu-items');
