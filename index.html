@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bible App with Relevant Verses & Bible Images</title>
+<title>Bible App by Yel Portillo</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
   body {
@@ -49,7 +49,6 @@
     margin: 0;
     width: 160px;
     display: none;
-    z-index: 100;
   }
   ul.menu-items li {
     padding: 10px 20px;
@@ -83,7 +82,6 @@
     object-fit: cover;
     border-radius: 12px;
     margin-bottom: 25px;
-    transition: opacity 0.3s ease;
   }
   button {
     background-color: #2563eb;
@@ -107,7 +105,6 @@
   }
   #name, #prayerInput {
     width: 100%;
-    max-width: 100%;
     margin-bottom: 12px;
     padding: 12px;
     border-radius: 8px;
@@ -178,98 +175,60 @@
 </div>
 
 <script>
-  const bibleBooks = [
-    "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
-    "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
-    "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles",
-    "Ezra", "Nehemiah", "Esther", "Job", "Psalms",
-    "Proverbs", "Ecclesiastes", "Song of Solomon", "Isaiah",
-    "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea",
-    "Joel", "Amos", "Obadiah", "Jonah", "Micah",
-    "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah",
-    "Malachi", "Matthew", "Mark", "Luke", "John",
-    "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians",
-    "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
-    "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews",
-    "James", "1 Peter", "2 Peter", "1 John", "2 John",
-    "3 John", "Jude", "Revelation"
+  const bibleVerses = [
+    { book: "John", chapter: 3, verse: 16, text: "For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life." },
+    { book: "Philippians", chapter: 4, verse: 13, text: "I can do all things through Christ who strengthens me." },
+    { book: "Psalm", chapter: 23, verse: 1, text: "The Lord is my shepherd; I shall not want." },
+    { book: "Romans", chapter: 8, verse: 28, text: "And we know that in all things God works for the good of those who love Him, who have been called according to His purpose." },
+    { book: "Isaiah", chapter: 41, verse: 10, text: "Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand." },
+    { book: "Proverbs", chapter: 3, verse: 5, text: "Trust in the Lord with all your heart and lean not on your own understanding." },
+    { book: "Matthew", chapter: 11, verse: 28, text: "Come to me, all you who are weary and burdened, and I will give you rest." },
+    { book: "Jeremiah", chapter: 29, verse: 11, text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future." }
   ];
 
-  const bookChapters = {
-    "Genesis": 50, "Exodus": 40, "Leviticus": 27, "Numbers": 36, "Deuteronomy": 34,
-    "Joshua": 24, "Judges": 21, "Ruth": 4, "1 Samuel": 31, "2 Samuel": 24,
-    "1 Kings": 22, "2 Kings": 25, "1 Chronicles": 29, "2 Chronicles": 36,
-    "Ezra": 10, "Nehemiah": 13, "Esther": 10, "Job": 42, "Psalms": 150,
-    "Proverbs": 31, "Ecclesiastes": 12, "Song of Solomon": 8, "Isaiah": 66,
-    "Jeremiah": 52, "Lamentations": 5, "Ezekiel": 48, "Daniel": 12, "Hosea": 14,
-    "Joel": 3, "Amos": 9, "Obadiah": 1, "Jonah": 4, "Micah": 7,
-    "Nahum": 3, "Habakkuk": 3, "Zephaniah": 3, "Haggai": 2, "Zechariah": 14,
-    "Malachi": 4, "Matthew": 28, "Mark": 16, "Luke": 24, "John": 21,
-    "Acts": 28, "Romans": 16, "1 Corinthians": 16, "2 Corinthians": 13,
-    "Galatians": 6, "Ephesians": 6, "Philippians": 4, "Colossians": 4,
-    "1 Thessalonians": 5, "2 Thessalonians": 3, "1 Timothy": 6, "2 Timothy": 4,
-    "Titus": 3, "Philemon": 1, "Hebrews": 13, "James": 5, "1 Peter": 5,
-    "2 Peter": 3, "1 John": 5, "2 John": 1, "3 John": 1, "Jude": 1,
-    "Revelation": 22
-  };
-
-  // Bible-specific images
   const bibleImages = [
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1529655683826-aba9b3e77383?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1519337265831-281ec6cc8514?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1516822003754-cca485356ecb?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1534258946811-86a4f83049a1?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1476888114853-282de3e6d2d6?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1543340713-8aa6a0de1aa9?auto=format&fit=crop&w=600&q=80",
-    "https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=600&q=80"
+    "https://images.unsplash.com/photo-1528701800489-20be9c1e94d7",
+    "https://images.unsplash.com/photo-1553729459-efe14ef6055d",
+    "https://images.unsplash.com/photo-1508780709619-79562169bc64",
+    "https://images.unsplash.com/photo-1580587771525-78b9dba3b914",
+    "https://images.unsplash.com/photo-1543269865-cbf427effbad",
+    "https://images.unsplash.com/photo-1519681393784-d120267933ba",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+    "https://images.unsplash.com/photo-1473187983305-f615310e7daa"
   ];
 
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  function loadBibleImage() {
-    const img = document.getElementById('bible-image');
-    img.style.opacity = 0;
-
-    function tryLoad() {
-      const url = bibleImages[randInt(0, bibleImages.length - 1)];
-      img.src = url + "?random=" + Math.random();
-      img.onload = () => img.style.opacity = 1;
-      img.onerror = () => {
-        console.warn("Image failed to load, retrying...");
-        setTimeout(tryLoad, 500);
-      };
-    }
-    tryLoad();
-  }
-
   async function fetchRandomVerse() {
+    const verseObj = bibleVerses[randInt(0, bibleVerses.length - 1)];
     document.getElementById('verse').textContent = "Loading verse...";
     document.getElementById('prayer').textContent = "";
     loadBibleImage();
 
-    let book = bibleBooks[randInt(0, bibleBooks.length - 1)];
-    let chapter = bookChapters[book] ? randInt(1, bookChapters[book]) : randInt(1, 30);
-
     try {
-      const url = `https://bible-api.com/${encodeURIComponent(book)}%20${chapter}`;
+      const url = `https://bible-api.com/${encodeURIComponent(verseObj.book)}+${verseObj.chapter}:${verseObj.verse}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Network error");
       const data = await response.json();
 
-      if (!data.verses || data.verses.length === 0) throw new Error("No verses found");
-      const verseIndex = randInt(0, data.verses.length - 1);
-      const verseObj = data.verses[verseIndex];
-
-      document.getElementById('verse').textContent = `${book} ${verseObj.chapter}:${verseObj.verse} - ${verseObj.text.trim()}`;
-      document.getElementById('prayer').textContent = generatePrayer(book.length % 5);
+      const text = data.text ? data.text.trim() : verseObj.text;
+      document.getElementById('verse').textContent = `${verseObj.book} ${verseObj.chapter}:${verseObj.verse} - ${text}`;
+      document.getElementById('prayer').textContent = generatePrayer(verseObj.book.length % 5);
 
     } catch (err) {
-      document.getElementById('verse').textContent = "Failed to load verse. Please try again.";
-      console.error(err);
+      console.warn("API failed, fallback to local verse");
+      document.getElementById('verse').textContent = `${verseObj.book} ${verseObj.chapter}:${verseObj.verse} - ${verseObj.text}`;
+      document.getElementById('prayer').textContent = generatePrayer(verseObj.book.length % 5);
     }
+  }
+
+  function loadBibleImage() {
+    const img = document.getElementById('bible-image');
+    const randomImg = bibleImages[randInt(0, bibleImages.length - 1)];
+    img.src = randomImg;
+    img.onerror = () => loadBibleImage(); // retry if image fails
   }
 
   function generatePrayer(selector) {
@@ -302,22 +261,26 @@
 
   function displayDate() {
     const today = new Date();
-    document.getElementById('date').textContent = today.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+    document.getElementById('date').textContent = today.toLocaleDateString('en-US', options);
   }
 
   function submitPrayer() {
-    const name = document.getElementById('name').value.trim() || "Anonymous";
+    const nameInput = document.getElementById('name').value.trim();
     const prayerInput = document.getElementById('prayerInput').value.trim();
-    if (!prayerInput) return alert("Please enter your prayer before submitting.");
+    if (!prayerInput) {
+      alert("Please enter your prayer before submitting.");
+      return;
+    }
 
+    const name = nameInput || "Anonymous";
     const now = new Date();
-    const newPrayer = {
-      name,
-      prayer: prayerInput,
-      date: now.toLocaleDateString('en-US'),
-      time: now.toLocaleTimeString('en-US')
-    };
+    const dateOptions = { year:'numeric', month:'long', day:'numeric' };
+    const timeOptions = { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true };
+    const date = now.toLocaleDateString('en-US', dateOptions);
+    const time = now.toLocaleTimeString('en-US', timeOptions);
 
+    const newPrayer = { name, prayer: prayerInput, date, time };
     let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
     prayers.unshift(newPrayer);
     localStorage.setItem('prayers', JSON.stringify(prayers));
@@ -344,7 +307,8 @@
   }
 
   function escapeHtml(text) {
-    return text.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return text.replace(/[&<>"']/g, m => map[m]);
   }
 
   window.onload = () => {
