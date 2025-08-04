@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bible App with Splash Images and Music</title>
+<title>Bible App by Yel Portillo</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
   body {
@@ -76,6 +76,7 @@
     font-size: 16px;
     color: #555;
     margin-bottom: 20px;
+    white-space: pre-wrap;
   }
   #bible-image {
     width: 100%;
@@ -83,7 +84,6 @@
     object-fit: cover;
     border-radius: 12px;
     margin-bottom: 25px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
   }
   button {
     background-color: #2563eb;
@@ -146,235 +146,376 @@
     font-size: 13px;
     color: #777;
   }
+  /* Bold and Italics styling for headings */
+  #verseTab > h2 {
+    font-weight: 600;
+  }
+  #prayer {
+    font-style: italic;
+  }
+  #prayerTab > h2 {
+    font-weight: 600;
+  }
+  /* Responsive */
+  @media(max-width: 640px) {
+    #container {
+      padding: 20px;
+      margin: 10px;
+    }
+  }
 </style>
 </head>
 <body>
 
-<div id="container">
-  <div id="menu" onclick="toggleMenu()">☰</div>
-  <ul class="menu-items" id="menu-items">
-    <li onclick="showVerseTab()">Verse of the Day</li>
-    <li onclick="showPrayerTab()">Prayer Wall</li>
+<div id="container" role="main" aria-label="Bible app">
+  <div id="menu" aria-haspopup="true" aria-expanded="false" tabindex="0" role="button" aria-label="Toggle menu" onclick="toggleMenu()" onkeydown="if(event.key==='Enter'){toggleMenu()}">☰</div>
+  <ul class="menu-items" id="menu-items" role="menu" aria-label="Navigation menu">
+    <li role="menuitem" tabindex="0" onclick="showVerseTab()" onkeydown="if(event.key==='Enter'){showVerseTab()}">Verse of the Day</li>
+    <li role="menuitem" tabindex="0" onclick="showPrayerTab()" onkeydown="if(event.key==='Enter'){showPrayerTab()}">Prayer Wall</li>
   </ul>
 
   <!-- Verse of the Day Section -->
-  <div id="verseTab">
+  <section id="verseTab" aria-live="polite" aria-atomic="true">
     <h2>Verse of the Day</h2>
-    <p id="date"></p>
-    <p id="verse">Loading verse...</p>
-    <p id="prayer"></p>
-    <img id="bible-image" src="" alt="Bible Image" />
-    <button onclick="fetchRandomVerse()">Generate New Verse</button>
-  </div>
+    <p id="date" aria-label="Current date"></p>
+    <p id="verse" aria-label="Bible verse">Loading verse...</p>
+    <p id="prayer" aria-label="Related prayer"></p>
+    <img id="bible-image" src="" alt="Bible related image" />
+    <button onclick="fetchRandomVerse()" aria-label="Generate new Bible verse">Generate New Verse</button>
+  </section>
 
   <!-- Prayer Wall Section -->
-  <div id="prayerTab" style="display:none;">
+  <section id="prayerTab" style="display:none;">
     <h2>Prayer Wall</h2>
-    <input id="name" placeholder="Your Name (optional)" />
-    <textarea id="prayerInput" placeholder="Write your prayer here..."></textarea>
-    <button onclick="submitPrayer()">Submit Prayer</button>
-
-    <div id="prayer-list"></div>
-  </div>
+    <input id="name" placeholder="Your Name (optional)" aria-label="Name input" />
+    <textarea id="prayerInput" placeholder="Write your prayer here..." aria-label="Prayer input"></textarea>
+    <button onclick="submitPrayer()" aria-label="Submit prayer">Submit Prayer</button>
+    <div id="prayer-list" aria-live="polite" aria-atomic="false"></div>
+  </section>
 </div>
 
-<audio id="bg-music" src="media/music.mp3" autoplay muted loop></audio>
+<!-- Background Music -->
+<audio id="bg-music" src="media/music.mp3" loop muted></audio>
 
 <script>
-  // Top 30 Bible verses with prayers
+  // Top 30 meaningful Bible verses with prayers (praise, repent, ask, yield)
   const verses = [
-    { verse: "John 3:16", text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", prayer: "Heavenly Father, we praise Your incredible love and sacrifice for us. We repent of our sins and ask for Your mercy. Help us to yield fully to Your will and live in Your grace. Amen." },
-    { verse: "Psalm 23:1", text: "The Lord is my shepherd, I lack nothing.", prayer: "Lord, You are my shepherd and my guide. I praise You for Your provision and care. I repent when I stray and ask You to lead me on Your path. I yield my life to Your loving hand. Amen." },
-    { verse: "Philippians 4:13", text: "I can do all this through him who gives me strength.", prayer: "Jesus, I praise You as my source of strength. I repent of my doubts and fears. I ask for Your empowerment in every challenge. I yield to Your power and grace in my life. Amen." },
-    { verse: "Romans 8:28", text: "And we know that in all things God works for the good of those who love him.", prayer: "God, I praise You for Your sovereignty and faithfulness. I repent for times I fail to trust You. I ask You to help me see Your hand in every circumstance. I yield my plans to Your perfect will. Amen." },
-    { verse: "Jeremiah 29:11", text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.", prayer: "Father, I praise Your loving plans for my life. I repent of impatience and fear. I ask for hope and peace in uncertain times. I yield my future fully into Your hands. Amen." },
-    { verse: "Proverbs 3:5-6", text: "Trust in the Lord with all your heart and lean not on your own understanding.", prayer: "Lord, I praise You as my wisdom and guide. I repent of relying on my own understanding. I ask for Your direction daily. I yield all my decisions to You. Amen." },
-    { verse: "Isaiah 40:31", text: "But those who hope in the Lord will renew their strength.", prayer: "God, I praise You for being my source of strength and hope. I repent when I grow weary and lose faith. I ask You to renew my spirit and energy. I yield to Your sustaining power. Amen." },
-    { verse: "Matthew 11:28", text: "Come to me, all who are weary and burdened, and I will give you rest.", prayer: "Jesus, I praise You as my rest and refuge. I repent of carrying burdens alone. I ask for Your peace to calm my soul. I yield my worries to You completely. Amen." },
-    { verse: "Ephesians 2:8", text: "For it is by grace you have been saved, through faith—and this is not from yourselves, it is the gift of God.", prayer: "Lord, I praise Your amazing grace that saves me. I repent of trying to earn Your favor. I ask for faith to rest fully in Your gift. I yield my life to Your saving grace. Amen." },
-    { verse: "Psalm 46:1", text: "God is our refuge and strength, an ever-present help in trouble.", prayer: "God, I praise You as my refuge and strength. I repent for doubting Your presence. I ask You to be near in my trials. I yield to Your comforting presence. Amen." },
-    { verse: "2 Corinthians 12:9", text: "My grace is sufficient for you, for my power is made perfect in weakness.", prayer: "Lord, I praise Your grace that sustains me. I repent of wanting strength on my own. I ask for Your power to be shown in my weakness. I yield my limitations to You. Amen." },
-    { verse: "Romans 5:8", text: "But God demonstrates his own love for us in this: While we were still sinners, Christ died for us.", prayer: "Father, I praise Your unconditional love and sacrifice. I repent for my sins that separate me. I ask for a heart to receive Your love. I yield fully to Your mercy. Amen." },
-    { verse: "Psalm 119:105", text: "Your word is a lamp to my feet and a light to my path.", prayer: "Lord, I praise You as the light that guides me. I repent when I neglect Your Word. I ask for wisdom and clarity in my path. I yield to Your truth and teaching. Amen." },
-    { verse: "Galatians 5:22-23", text: "But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.", prayer: "Holy Spirit, I praise Your work in my heart. I repent of lacking Your fruits. I ask for Your help to grow in grace. I yield to Your transforming power. Amen." },
-    { verse: "Matthew 6:33", text: "But seek first his kingdom and his righteousness, and all these things will be given to you as well.", prayer: "Father, I praise Your kingdom and righteousness. I repent for putting other things first. I ask for focus on Your will. I yield my desires to Your kingdom. Amen." },
-    { verse: "1 Peter 5:7", text: "Cast all your anxiety on him because he cares for you.", prayer: "Lord, I praise Your tender care for me. I repent for carrying anxiety alone. I ask for peace to trust You fully. I yield all my worries into Your hands. Amen." },
-    { verse: "Hebrews 11:1", text: "Now faith is confidence in what we hope for and assurance about what we do not see.", prayer: "God, I praise You for the gift of faith. I repent when I doubt Your promises. I ask for unwavering trust in You. I yield my uncertainties to Your truth. Amen." },
-    { verse: "Joshua 1:9", text: "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.", prayer: "Lord, I praise Your promise to be with me always. I repent of fear and discouragement. I ask for strength and courage each day. I yield to Your presence and power. Amen." },
-    { verse: "Psalm 37:4", text: "Take delight in the Lord, and he will give you the desires of your heart.", prayer: "Father, I praise You as my joy and delight. I repent when I seek pleasure elsewhere. I ask that my desires align with Your will. I yield my heart to find joy in You alone. Amen." },
-    { verse: "Colossians 3:23", text: "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters.", prayer: "Lord, I praise You as my true Master. I repent of half-hearted efforts. I ask for passion and dedication in all I do. I yield my work to glorify You. Amen." },
-    { verse: "Isaiah 41:10", text: "So do not fear, for I am with you; do not be dismayed, for I am your God.", prayer: "God, I praise You as my protector and strength. I repent of fear and doubt. I ask for Your peace to calm my heart. I yield all fears into Your care. Amen." },
-    { verse: "John 14:6", text: "Jesus answered, 'I am the way and the truth and the life. No one comes to the Father except through me.'", prayer: "Jesus, I praise You as my Savior and guide. I repent for seeking other ways. I ask for clarity to follow You alone. I yield my life to Your truth and love. Amen." },
-    { verse: "Romans 12:2", text: "Do not conform to the pattern of this world, but be transformed by the renewing of your mind.", prayer: "Lord, I praise You for the power to transform. I repent for conforming to worldly ways. I ask for a renewed mind to follow Your will. I yield my thoughts and actions to You. Amen." },
-    { verse: "Psalm 34:18", text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.", prayer: "God, I praise Your closeness in my pain. I repent of isolation and despair. I ask for healing and comfort. I yield my brokenness to Your loving hands. Amen." },
-    { verse: "2 Timothy 1:7", text: "For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.", prayer: "Holy Spirit, I praise Your power and love. I repent of timidity and fear. I ask for boldness and self-control. I yield my life to Your empowering presence. Amen." },
-    { verse: "Matthew 5:16", text: "Let your light shine before others, that they may see your good deeds and glorify your Father in heaven.", prayer: "Lord, I praise You as my light and strength. I repent of hiding my faith. I ask for courage to shine for You. I yield my actions to glorify You always. Amen." },
-    { verse: "James 1:5", text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault.", prayer: "God, I praise Your generous wisdom. I repent when I rely on my own knowledge. I ask for wisdom in every decision. I yield my understanding to Your guidance. Amen." },
-    { verse: "Philippians 4:6-7", text: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.", prayer: "Lord, I praise Your peace that surpasses understanding. I repent of anxiety and worry. I ask for a thankful heart in all things. I yield my concerns through prayer. Amen." },
-    { verse: "Psalm 91:1", text: "Whoever dwells in the shelter of the Most High will rest in the shadow of the Almighty.", prayer: "Father, I praise You as my shelter and refuge. I repent of seeking safety elsewhere. I ask to dwell continually in Your presence. I yield my life to Your protection. Amen." },
-    { verse: "Hebrews 13:5", text: "Never will I leave you; never will I forsake you.", prayer: "God, I praise Your faithful presence. I repent of feeling abandoned. I ask for assurance of Your constant love. I yield my fears to Your unending faithfulness. Amen." }
+    {
+      verse: "John 3:16",
+      text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
+      prayer: "Heavenly Father, we praise Your boundless love and grace. We repent for the times we've doubted Your mercy. We ask for faith to believe fully and eternal life in Your presence. We yield our hearts to Your perfect will. Amen."
+    },
+    {
+      verse: "Psalm 23:1",
+      text: "The Lord is my shepherd, I lack nothing.",
+      prayer: "Lord, we praise You as our shepherd who provides all we need. We repent when we try to rely on our own strength. We ask for guidance and provision. We yield to Your care and protection always. Amen."
+    },
+    {
+      verse: "Philippians 4:13",
+      text: "I can do all this through him who gives me strength.",
+      prayer: "God, we praise Your empowering presence in our lives. We repent of weakness and fear. We ask for strength to face every challenge. We yield to Your sustaining power each day. Amen."
+    },
+    {
+      verse: "Romans 8:28",
+      text: "And we know that in all things God works for the good of those who love him, who have been called according to his purpose.",
+      prayer: "Father, we praise Your sovereignty and goodness. We repent when we fail to trust Your plan. We ask for peace in trials. We yield to Your perfect purpose for our lives. Amen."
+    },
+    {
+      verse: "Jeremiah 29:11",
+      text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.",
+      prayer: "Lord, we praise Your promise of hope and a future. We repent of doubt and anxiety. We ask for assurance in Your plans. We yield to Your guidance and timing. Amen."
+    },
+    {
+      verse: "Isaiah 41:10",
+      text: "So do not fear, for I am with you; do not be dismayed, for I am your God.",
+      prayer: "God, we praise Your faithful presence. We repent of our fears and worries. We ask for courage and comfort. We yield our lives into Your loving hands. Amen."
+    },
+    {
+      verse: "Proverbs 3:5-6",
+      text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.",
+      prayer: "Lord, we praise Your guidance and wisdom. We repent when we rely on ourselves. We ask for trust and submission. We yield our paths to Your leading. Amen."
+    },
+    {
+      verse: "Matthew 6:33",
+      text: "But seek first his kingdom and his righteousness, and all these things will be given to you as well.",
+      prayer: "Heavenly Father, we praise Your kingdom above all else. We repent of distractions and selfish desires. We ask for a heart that prioritizes You. We yield to Your righteousness daily. Amen."
+    },
+    {
+      verse: "2 Corinthians 12:9",
+      text: "My grace is sufficient for you, for my power is made perfect in weakness.",
+      prayer: "Lord, we praise Your abundant grace. We repent of pride and self-reliance. We ask for humility and strength through You. We yield in our weakness to Your power. Amen."
+    },
+    {
+      verse: "Psalm 46:1",
+      text: "God is our refuge and strength, an ever-present help in trouble.",
+      prayer: "God, we praise You as our refuge and strength. We repent when we seek help elsewhere. We ask for Your presence in trouble. We yield to Your protection and peace. Amen."
+    },
+    {
+      verse: "Romans 12:2",
+      text: "Do not conform to the pattern of this world, but be transformed by the renewing of your mind.",
+      prayer: "Lord, we praise Your power to transform. We repent of worldly conformity. We ask for renewal and clarity. We yield our minds and hearts to You. Amen."
+    },
+    {
+      verse: "Hebrews 11:1",
+      text: "Now faith is confidence in what we hope for and assurance about what we do not see.",
+      prayer: "Father, we praise the gift of faith. We repent of doubt and unbelief. We ask for confidence in Your promises. We yield to trust in Your unseen ways. Amen."
+    },
+    {
+      verse: "Psalm 37:4",
+      text: "Take delight in the Lord, and he will give you the desires of your heart.",
+      prayer: "Lord, we praise the joy found in You. We repent of selfish desires. We ask for a heart aligned with Yours. We yield to delighting in Your will. Amen."
+    },
+    {
+      verse: "Galatians 5:22-23",
+      text: "But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.",
+      prayer: "Holy Spirit, we praise Your fruit in our lives. We repent of lacking these qualities. We ask for growth in Your fruit. We yield fully to Your work in us. Amen."
+    },
+    {
+      verse: "John 14:6",
+      text: "Jesus answered, 'I am the way and the truth and the life. No one comes to the Father except through me.'",
+      prayer: "Jesus, we praise You as the only way. We repent of trying to find our own way. We ask for clear understanding and faith. We yield our lives to You alone. Amen."
+    },
+    {
+      verse: "Matthew 11:28",
+      text: "Come to me, all you who are weary and burdened, and I will give you rest.",
+      prayer: "Lord, we praise Your invitation to rest. We repent of carrying burdens alone. We ask for Your peace and rest. We yield our weariness to You. Amen."
+    },
+    {
+      verse: "Ephesians 2:8",
+      text: "For it is by grace you have been saved, through faith—and this is not from yourselves, it is the gift of God.",
+      prayer: "Father, we praise Your amazing grace. We repent of trying to earn salvation. We ask for faith to receive Your gift. We yield fully to Your grace. Amen."
+    },
+    {
+      verse: "James 1:5",
+      text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault.",
+      prayer: "God, we praise Your generosity. We repent when we neglect to seek wisdom. We ask for Your guidance and understanding. We yield to Your wise counsel. Amen."
+    },
+    {
+      verse: "Psalm 34:18",
+      text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.",
+      prayer: "Lord, we praise Your nearness in pain. We repent of feeling alone. We ask for comfort and healing. We yield our broken hearts to You. Amen."
+    },
+    {
+      verse: "Colossians 3:23",
+      text: "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters.",
+      prayer: "Lord, we praise the call to wholehearted service. We repent of half-hearted efforts. We ask for passion and diligence. We yield all our work to Your glory. Amen."
+    },
+    {
+      verse: "Isaiah 40:31",
+      text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles.",
+      prayer: "God, we praise Your renewing strength. We repent of losing hope. We ask for renewed courage. We yield our weakness and soar in Your power. Amen."
+    },
+    {
+      verse: "1 Peter 5:7",
+      text: "Cast all your anxiety on him because he cares for you.",
+      prayer: "Lord, we praise Your caring heart. We repent of anxiety and worry. We ask for peace and trust. We yield all our cares to You. Amen."
+    },
+    {
+      verse: "John 16:33",
+      text: "In this world you will have trouble. But take heart! I have overcome the world.",
+      prayer: "Jesus, we praise Your victory over trouble. We repent of fear and discouragement. We ask for courage to endure. We yield to Your victorious peace. Amen."
+    },
+    {
+      verse: "2 Timothy 1:7",
+      text: "For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.",
+      prayer: "Holy Spirit, we praise Your gifts of power, love, and self-control. We repent of timidity and fear. We ask for boldness and discipline. We yield to Your empowering presence. Amen."
+    },
+    {
+      verse: "Psalm 119:105",
+      text: "Your word is a lamp to my feet and a light to my path.",
+      prayer: "Lord, we praise Your guiding Word. We repent of ignoring Your guidance. We ask for clarity and direction. We yield our paths to Your light. Amen."
+    },
+    {
+      verse: "Matthew 5:16",
+      text: "Let your light shine before others, that they may see your good deeds and glorify your Father in heaven.",
+      prayer: "Father, we praise the call to shine for You. We repent of hiding our light. We ask for courage to live boldly. We yield to glorify You in all we do. Amen."
+    },
+    {
+      verse: "Philippians 4:6",
+      text: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.",
+      prayer: "Lord, we praise Your peace that surpasses understanding. We repent of worry and doubt. We ask for faithful prayer and thanksgiving. We yield our anxieties to You daily. Amen."
+    },
+    {
+      verse: "Romans 5:8",
+      text: "But God demonstrates his own love for us in this: While we were still sinners, Christ died for us.",
+      prayer: "God, we praise Your unconditional love. We repent of sin and rebellion. We ask for grateful hearts. We yield fully to Your redeeming love. Amen."
+    },
+    {
+      verse: "Hebrews 13:5",
+      text: "Never will I leave you; never will I forsake you.",
+      prayer: "Lord, we praise Your faithful presence. We repent of feeling abandoned. We ask for assurance and comfort. We yield to Your eternal companionship. Amen."
+    }
   ];
 
-  // Array of Bible-related splash images (URLs from Unsplash, Pexels, Pixabay with Bible or church themes)
+  // Curated stable Bible-related splash images with retry on error
   const splashImages = [
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", // open Bible pages
-    "https://images.unsplash.com/photo-1486308510493-cb1247b30b3e?auto=format&fit=crop&w=800&q=80", // cross silhouette sunset
-    "https://images.unsplash.com/photo-1465812581817-22d4a1a920f6?auto=format&fit=crop&w=800&q=80", // hands praying
-    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80", // church interior
-    "https://images.unsplash.com/photo-1536859355446-7a9364aaf072?auto=format&fit=crop&w=800&q=80", // Bible on wood table
-    "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=800&q=80", // cross on hill
-    "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=800&q=80", // sunrise with cross
-    "https://images.unsplash.com/photo-1553163147-622ab57b8d29?auto=format&fit=crop&w=800&q=80", // church window stained glass
-    "https://images.unsplash.com/photo-1504494683947-2c9f166f948e?auto=format&fit=crop&w=800&q=80", // hands holding Bible
-    "https://images.unsplash.com/photo-1501584931734-2f303a5e1a9c?auto=format&fit=crop&w=800&q=80", // candle and cross
-    "https://images.unsplash.com/photo-1501436513147-5ec1ed041d57?auto=format&fit=crop&w=800&q=80", // outdoor chapel
-    "https://images.unsplash.com/photo-1505462687922-16eaba38e375?auto=format&fit=crop&w=800&q=80", // quiet chapel bench
-    "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=800&q=80", // hands raised church
-    "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?auto=format&fit=crop&w=800&q=80", // open Bible close up
-    "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=80", // cross on mountain
-    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80", // stained glass close
-    "https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=800&q=80", // sunset cross silhouette
-    "https://images.unsplash.com/photo-1486308510493-cb1247b30b3e?auto=format&fit=crop&w=800&q=80", // again cross sunset
-    "https://images.unsplash.com/photo-1511174511562-5f7f06f7763b?auto=format&fit=crop&w=800&q=80", // open Bible with rosary
-    "https://images.unsplash.com/photo-1517816428104-93b8fa78bce0?auto=format&fit=crop&w=800&q=80", // hands open in prayer
-    "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=800&q=80", // Bible on rustic table
-    "https://images.unsplash.com/photo-1445820133074-fc7266e58f4a?auto=format&fit=crop&w=800&q=80", // church building front
-    "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80", // path through woods light
-    "https://images.unsplash.com/photo-1502457131830-998e12adf54f?auto=format&fit=crop&w=800&q=80", // altar with candle
-    "https://images.unsplash.com/photo-1519682577862-22b62b24e493?auto=format&fit=crop&w=800&q=80", // praying hands close up
-    "https://images.unsplash.com/photo-1502164980785-f8aa1f4e0d4d?auto=format&fit=crop&w=800&q=80", // cross and sky clouds
-    "https://images.unsplash.com/photo-1518749813663-3a8c9c1e1227?auto=format&fit=crop&w=800&q=80", // old Bible pages
-    "https://images.unsplash.com/photo-1507652954-71cd54e01771?auto=format&fit=crop&w=800&q=80", // church in sunlight
-    "https://images.unsplash.com/photo-1468894079333-7f130d6ee4ec?auto=format&fit=crop&w=800&q=80", // light rays in church
-    "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80"  // person praying at sunrise
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80", // Bible with cross
+    "https://images.unsplash.com/photo-1486308510493-cb1247b30b3e?auto=format&fit=crop&w=800&q=80", // Church interior
+    "https://images.unsplash.com/photo-1465812581817-22d4a1a920f6?auto=format&fit=crop&w=800&q=80", // Hands holding Bible
+    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80", // Cross on sunset
+    "https://images.unsplash.com/photo-1536859355446-7a9364aaf072?auto=format&fit=crop&w=800&q=80", // Open Bible
+    "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=800&q=80", // Bible pages
+    "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=800&q=80", // Wooden cross on grass
+    "https://images.unsplash.com/photo-1553163147-622ab57b8d29?auto=format&fit=crop&w=800&q=80", // Church window with cross
+    "https://images.unsplash.com/photo-1504494683947-2c9f166f948e?auto=format&fit=crop&w=800&q=80", // Praying hands
+    "https://images.unsplash.com/photo-1501584931734-2f303a5e1a9c?auto=format&fit=crop&w=800&q=80", // Candle and Bible
+    "https://images.unsplash.com/photo-1501436513147-5ec1ed041d57?auto=format&fit=crop&w=800&q=80", // Bible and cross on table
+    "https://images.unsplash.com/photo-1505462687922-16eaba38e375?auto=format&fit=crop&w=800&q=80"  // Cross necklace
   ];
 
-  // Show/hide menu
-  function toggleMenu() {
-    const menu = document.getElementById('menu-items');
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-  }
-
-  // Tabs
-  function showVerseTab() {
-    document.getElementById('verseTab').style.display = 'block';
-    document.getElementById('prayerTab').style.display = 'none';
-    toggleMenu();
-  }
-  function showPrayerTab() {
-    document.getElementById('verseTab').style.display = 'none';
-    document.getElementById('prayerTab').style.display = 'block';
-    toggleMenu();
-    loadPrayers();
-  }
-
-  // Display today's date
-  function displayDate() {
-    const d = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('date').textContent = d.toLocaleDateString(undefined, options);
-  }
-
-  // Pick a random integer helper
+  // Utility random integer function
   function randomInt(max) {
     return Math.floor(Math.random() * max);
   }
 
-  // Show random verse with prayer and splash image
-  function fetchRandomVerse() {
-    const idx = randomInt(verses.length);
-    const verseObj = verses[idx];
-    const imgIdx = randomInt(splashImages.length);
-    const imgUrl = splashImages[imgIdx];
+  // Load image with retry if fails, maxRetries = 5
+  function loadImageWithRetry(imgElement, maxRetries = 5) {
+    let retries = 0;
+    function tryLoad() {
+      const idx = randomInt(splashImages.length);
+      const url = splashImages[idx];
+      imgElement.src = url;
 
-    document.getElementById('verse').textContent = `${verseObj.verse} - "${verseObj.text}"`;
-    document.getElementById('prayer').textContent = verseObj.prayer;
-    const img = document.getElementById('bible-image');
-    img.src = imgUrl;
-    img.alt = `Image related to ${verseObj.verse}`;
+      imgElement.onerror = () => {
+        retries++;
+        if (retries < maxRetries) {
+          tryLoad();
+        } else {
+          imgElement.src = "https://via.placeholder.com/600x400?text=Image+not+available";
+        }
+      };
+
+      imgElement.onload = () => {
+        // Image loaded successfully, clear error handler to avoid retries firing unnecessarily
+        imgElement.onerror = null;
+      };
+    }
+    tryLoad();
   }
 
-  // Prayer Wall Logic
-  function submitPrayer() {
-    const nameInput = document.getElementById('name');
-    const prayerInput = document.getElementById('prayerInput');
-    const name = nameInput.value.trim() || "Anonymous";
-    const text = prayerInput.value.trim();
-
-    if (!text) {
-      alert("Please enter a prayer before submitting.");
-      return;
-    }
-
-    const prayers = JSON.parse(localStorage.getItem('prayers') || '[]');
-    prayers.unshift({
-      name,
-      text,
-      time: new Date().toISOString()
-    });
-    localStorage.setItem('prayers', JSON.stringify(prayers));
-
-    nameInput.value = "";
-    prayerInput.value = "";
-
-    loadPrayers();
-    alert("Thank you for your prayer!");
+  // Toggle menu display
+  function toggleMenu() {
+    const menu = document.getElementById('menu-items');
+    const expanded = document.getElementById('menu').getAttribute('aria-expanded') === 'true';
+    document.getElementById('menu').setAttribute('aria-expanded', (!expanded).toString());
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
   }
 
-  function loadPrayers() {
-    const prayerList = document.getElementById('prayer-list');
-    prayerList.innerHTML = "";
-    const prayers = JSON.parse(localStorage.getItem('prayers') || '[]');
-    if (prayers.length === 0) {
-      prayerList.innerHTML = "<p>No prayers submitted yet. Be the first to pray!</p>";
-      return;
-    }
+  // Show Verse tab, hide Prayer tab
+  function showVerseTab() {
+    document.getElementById('verseTab').style.display = 'block';
+    document.getElementById('prayerTab').style.display = 'none';
+    document.getElementById('menu-items').style.display = 'none';
+    document.getElementById('menu').setAttribute('aria-expanded', 'false');
+  }
+
+  // Show Prayer tab, hide Verse tab
+  function showPrayerTab() {
+    document.getElementById('prayerTab').style.display = 'block';
+    document.getElementById('verseTab').style.display = 'none';
+    document.getElementById('menu-items').style.display = 'none';
+    document.getElementById('menu').setAttribute('aria-expanded', 'false');
+  }
+
+  // Display today's date
+  function displayDate() {
+    const today = new Date();
+    const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+    document.getElementById('date').textContent = today.toLocaleDateString('en-US', options);
+  }
+
+  // Escape text for HTML insertion
+  function escapeHtml(text) {
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return text.replace(/[&<>"']/g, m => map[m]);
+  }
+
+  // Display stored prayers from localStorage
+  function displayPrayers() {
+    const list = document.getElementById('prayer-list');
+    list.innerHTML = '';
+
+    let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
 
     prayers.forEach(p => {
       const div = document.createElement('div');
       div.className = 'prayer-item';
 
-      const nameDiv = document.createElement('div');
-      nameDiv.className = 'prayer-name';
-      nameDiv.textContent = p.name;
+      div.innerHTML =
+        `<div class="prayer-name">${escapeHtml(p.name)}</div>
+         <div class="prayer-text">${escapeHtml(p.prayer)}</div>
+         <div class="prayer-time">${p.date} at ${p.time}</div>`;
 
-      const textDiv = document.createElement('div');
-      textDiv.className = 'prayer-text';
-      textDiv.textContent = p.text;
-
-      const timeDiv = document.createElement('div');
-      timeDiv.className = 'prayer-time';
-      const time = new Date(p.time);
-      timeDiv.textContent = time.toLocaleString();
-
-      div.appendChild(nameDiv);
-      div.appendChild(textDiv);
-      div.appendChild(timeDiv);
-
-      prayerList.appendChild(div);
+      list.appendChild(div);
     });
   }
 
-  // Music autoplay logic with user interaction to unmute
-  const bgMusic = document.getElementById('bg-music');
-  let userInteracted = false;
+  // Submit a prayer and store it
+  function submitPrayer() {
+    const nameInput = document.getElementById('name').value.trim();
+    const prayerInput = document.getElementById('prayerInput').value.trim();
 
-  function enableAudio() {
-    if (!userInteracted) {
-      bgMusic.muted = false;
-      bgMusic.play().catch(() => {});
-      userInteracted = true;
-      window.removeEventListener('click', enableAudio);
-      window.removeEventListener('keydown', enableAudio);
+    if (!prayerInput) {
+      alert("Please enter your prayer before submitting.");
+      return;
     }
+
+    const name = nameInput || "Anonymous";
+    const now = new Date();
+    const dateOptions = { year:'numeric', month:'long', day:'numeric' };
+    const timeOptions = { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true };
+    const date = now.toLocaleDateString('en-US', dateOptions);
+    const time = now.toLocaleTimeString('en-US', timeOptions);
+
+    const newPrayer = { name, prayer: prayerInput, date, time };
+
+    let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
+    prayers.unshift(newPrayer);
+    localStorage.setItem('prayers', JSON.stringify(prayers));
+
+    displayPrayers();
+
+    document.getElementById('name').value = '';
+    document.getElementById('prayerInput').value = '';
   }
 
-  window.addEventListener('click', enableAudio);
-  window.addEventListener('keydown', enableAudio);
+  // Show a random verse with prayer and image
+  function fetchRandomVerse() {
+    const idx = randomInt(verses.length);
+    const verseObj = verses[idx];
 
-  // Initial setup
-  displayDate();
-  fetchRandomVerse();
+    document.getElementById('verse').textContent = `${verseObj.verse} - "${verseObj.text}"`;
+    document.getElementById('prayer').textContent = verseObj.prayer;
+
+    const imgElement = document.getElementById('bible-image');
+    loadImageWithRetry(imgElement);
+    imgElement.alt = `Bible related image for ${verseObj.verse}`;
+  }
+
+  // Attempt to play music on first user interaction
+  function enableMusicOnInteraction() {
+    const music = document.getElementById('bg-music');
+    if (music.paused) {
+      music.muted = false;
+      music.play().catch(() => {
+        // Autoplay might be blocked; keep muted or try later
+        music.muted = true;
+      });
+    }
+    // Remove listener after first use
+    window.removeEventListener('click', enableMusicOnInteraction);
+    window.removeEventListener('keydown', enableMusicOnInteraction);
+  }
+
+  window.onload = () => {
+    displayDate();
+    fetchRandomVerse();
+    displayPrayers();
+
+    // Setup music to autoplay unmuted on first interaction (click or keydown)
+    window.addEventListener('click', enableMusicOnInteraction);
+    window.addEventListener('keydown', enableMusicOnInteraction);
+  };
 </script>
 
 </body>
