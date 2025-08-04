@@ -1,286 +1,267 @@
+<!-- Created with the assistance of ChatGPT -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bible App</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-  }
-  #container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    max-width: 600px;
-    margin: 30px auto;
-    position: relative;
-  }
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
-  button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    background-color: #4CAF50;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #45a049;
-  }
-  /* Hamburger Menu */
-  .menu {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 26px;
-    color: #333;
-    cursor: pointer;
-  }
-  .menu-items {
-    display: none;
-    position: absolute;
-    top: 40px;
-    right: 10px;
-    background: white;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    list-style: none;
-    padding: 10px 0;
-    width: 180px;
-    text-align: left;
-    z-index: 10;
-  }
-  .menu-items li {
-    padding: 10px 20px;
-    font-size: 15px;
-    color: #444;
-    cursor: pointer;
-  }
-  .menu-items li:hover {
-    background-color: #f4f4f4;
-  }
-  .tab {
-    display: none;
-  }
-  .active {
-    display: block;
-  }
-  #prayer-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-  }
-  .prayer-item {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    text-align: center;
-    width: 90%;
-    max-width: 500px;
-    word-wrap: break-word;
-  }
-  #prayerTab input,
-  #prayerTab textarea {
-    width: 100%;
-    max-width: 500px;
-    display: block;
-    margin: 0 auto 10px auto;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: left;
-    box-sizing: border-box;
-  }
-  #prayerTab #container {
-    width: 95%;
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-  }
-  @media screen and (max-width: 480px) {
-    #prayerTab input,
-    #prayerTab textarea {
-      width: 90%;
-      margin: 0 auto;
-    }
-  }
-</style>
-<!-- Firebase SDKs -->
-<script type="module">
-  // Import Firebase modules
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY_HERE",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  window.firebaseDB = db; // expose globally to use in other functions
-  window.firebaseRef = ref(db, "prayers");
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        #container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+        }
+        h2 {
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #444;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #2563eb;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        /* Hamburger Menu */
+        .menu {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #444;
+            background: #fff;
+            border-radius: 8px;
+            padding: 4px 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .menu-items {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            list-style: none;
+            padding: 10px 0;
+            margin: 0;
+            z-index: 1000;
+        }
+        .menu-items li {
+            padding: 12px 20px;
+            cursor: pointer;
+            color: #333;
+            font-weight: 500;
+        }
+        .menu-items li:hover {
+            background: #f3f4f6;
+        }
+        .tab {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        #prayer-list {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            margin-top: 20px;
+        }
+        .prayer-item {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            text-align: left;
+            width: 100%;
+            color: #333;
+        }
+        .prayer-item strong {
+            font-size: 14px;
+            color: #2563eb;
+        }
+        .prayer-item small {
+            color: #777;
+            display: block;
+            margin-top: 6px;
+            font-size: 12px;
+        }
+        #prayerTab input,
+        #prayerTab textarea {
+            width: 100%;
+            display: block;
+            margin: 0 auto 10px auto;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+        }
+        textarea {
+            resize: none;
+        }
+        /* Responsive adjustments */
+        @media screen and (max-width: 480px) {
+            #container {
+                margin: 10px;
+                padding: 15px;
+            }
+            .menu {
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Verse of the Day Section -->
-  <div id="verseTab" class="tab active">
     <div id="container">
-      <div class="menu" onclick="toggleMenu()">☰
+        <!-- Menu Icon -->
+        <div class="menu" onclick="toggleMenu()">☰</div>
         <ul class="menu-items">
-          <li onclick="switchTab('verseTab')">Verse of the Day</li>
-          <li onclick="switchTab('prayerTab')">Prayer Wall</li>
+            <li onclick="switchTab('verseTab')">Verse of the Day</li>
+            <li onclick="switchTab('prayerTab')">Prayer Wall</li>
         </ul>
-      </div>
 
-      <h2>Verse of the Day</h2>
-      <p id="date"></p>
-      <p id="verse" style="white-space: pre-line; font-size: 18px; color: #333;"></p>
-      <p id="prayer" style="font-style: italic; color: #666; margin-top: 10px;"></p>
-      <img id="image" src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg" alt="Bible Image" />
-      <button onclick="generateVerse()">Generate New Verse</button>
+        <!-- Verse of the Day -->
+        <div id="verseTab" class="tab active">
+            <h2>Verse of the Day</h2>
+            <p id="date"></p>
+            <p id="verse" style="font-size: 18px; font-weight: 500;"></p>
+            <p id="prayer" style="font-size: 16px; margin-top: 10px; color:#555;"></p>
+            <img id="image" src="https://raw.githubusercontent.com/yelportillo/verseoftheday/main/media/bible.jpeg" alt="Bible Image">
+            <button onclick="generateVerse()">Generate New Verse</button>
+        </div>
+
+        <!-- Prayer Wall -->
+        <div id="prayerTab" class="tab">
+            <h2>Prayer Wall</h2>
+            <input type="text" id="name" placeholder="Your Name (Optional)">
+            <textarea id="prayerInput" placeholder="Write your prayer here..."></textarea>
+            <button onclick="submitPrayer()">Submit Prayer</button>
+            <div id="prayer-list"></div>
+        </div>
     </div>
-  </div>
 
-  <!-- Prayer Wall Section -->
-  <div id="prayerTab" class="tab">
-    <div id="container">
-      <h2>Prayer Wall</h2>
-      <input type="text" id="name" placeholder="Your Name (Optional)" />
-      <textarea id="prayerInput" placeholder="Write your prayer here..." style="height: 100px;"></textarea>
-      <button onclick="submitPrayer()">Submit Prayer</button>
-      <div id="prayer-list"></div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
-
-    // Menu toggle and tab switching
-    window.toggleMenu = function() {
-      const menu = document.querySelector(".menu-items");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
-    };
-
-    window.switchTab = function(tabId) {
-      document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-      document.getElementById(tabId).classList.add("active");
-      document.querySelector(".menu-items").style.display = "none";
-    };
-
-    // Show today's date
-    window.displayDate = function() {
-      const today = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      document.getElementById("date").innerText = today.toLocaleDateString("en-US", options);
-    };
-
-    // Fetch random Bible verse and related prayer
-    window.generateVerse = async function() {
-      try {
-        const response = await fetch("https://labs.bible.org/api/?passage=random&type=json");
-        const data = await response.json();
-        const verseText = `${data[0].bookname} ${data[0].chapter}:${data[0].verse} - ${data[0].text}`;
-        document.getElementById("verse").innerText = verseText;
-        document.getElementById("prayer").innerText = `Lord, help me to live according to ${data[0].bookname} ${data[0].chapter}:${data[0].verse} and trust in Your Word. Amen.`;
-      } catch (error) {
-        document.getElementById("verse").innerText = "Unable to load verse. Please try again.";
-        document.getElementById("prayer").innerText = "";
-      }
-    };
-
-    // Submit prayer to Firebase
-    window.submitPrayer = function() {
-      const nameInput = document.getElementById("name").value.trim();
-      const prayerInput = document.getElementById("prayerInput").value.trim();
-
-      if (prayerInput === "") {
-        alert("Please enter a prayer before submitting.");
-        return;
-      }
-
-      const name = nameInput === "" ? "Anonymous" : nameInput;
-
-      const now = new Date();
-      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-      const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-
-      const prayerEntry = {
-        name: name,
-        prayer: prayerInput,
-        date: now.toLocaleDateString("en-US", dateOptions),
-        time: now.toLocaleTimeString("en-US", timeOptions)
-      };
-
-      const db = window.firebaseDB;
-      const prayersRef = window.firebaseRef;
-
-      push(prayersRef, prayerEntry)
-        .then(() => {
-          document.getElementById("name").value = "";
-          document.getElementById("prayerInput").value = "";
-        })
-        .catch((error) => {
-          alert("Error submitting prayer: " + error);
-        });
-    };
-
-    // Listen for prayer changes and update UI
-    window.displayPrayers = function() {
-      const prayerList = document.getElementById("prayer-list");
-      const db = window.firebaseDB;
-      const prayersRef = window.firebaseRef;
-
-      // Clear current list
-      prayerList.innerHTML = "";
-
-      onValue(prayersRef, (snapshot) => {
-        prayerList.innerHTML = ""; // clear again to refresh on changes
-
-        const data = snapshot.val();
-        if (data) {
-          // Firebase returns object with unique keys, iterate over values:
-          Object.values(data).reverse().forEach(prayer => {
-            const prayerItem = document.createElement("div");
-            prayerItem.classList.add("prayer-item");
-            prayerItem.innerHTML = `
-              <div><strong>${prayer.name}</strong></div>
-              <div>${prayer.prayer}</div>
-              <small>${prayer.date} at ${prayer.time}</small>
-            `;
-            prayerList.appendChild(prayerItem);
-          });
+    <script>
+        function toggleMenu() {
+            const menu = document.querySelector(".menu-items");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
         }
-      });
-    };
 
-    window.onload = function() {
-      displayDate();
-      generateVerse();
-      displayPrayers();
-    };
-  </script>
+        function switchTab(tabId) {
+            document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+            document.getElementById(tabId).classList.add("active");
+            document.querySelector(".menu-items").style.display = "none";
+        }
+
+        function displayDate() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById("date").innerText = today.toLocaleDateString("en-US", options);
+        }
+
+        // Bible API fetch
+        async function generateVerse() {
+            try {
+                const response = await fetch("https://bible-api.com/john%203:16");
+                const data = await response.json();
+                document.getElementById("verse").innerText = `${data.reference} — ${data.text.trim()}`;
+                document.getElementById("prayer").innerText = "Prayer: Lord, help me live in Your truth and love every day. Amen.";
+            } catch (error) {
+                document.getElementById("verse").innerText = "Error loading verse. Please try again.";
+                document.getElementById("prayer").innerText = "";
+            }
+        }
+
+        function submitPrayer() {
+            const nameInput = document.getElementById("name").value.trim();
+            const prayerInput = document.getElementById("prayerInput").value.trim();
+
+            if (prayerInput === "") {
+                alert("Please enter a prayer before submitting.");
+                return;
+            }
+
+            const name = nameInput === "" ? "Anonymous" : nameInput;
+            const now = new Date();
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+
+            const prayerEntry = {
+                name,
+                prayer: prayerInput,
+                date: now.toLocaleDateString("en-US", dateOptions),
+                time: now.toLocaleTimeString("en-US", timeOptions)
+            };
+
+            let prayers = JSON.parse(localStorage.getItem("prayers")) || [];
+            prayers.unshift(prayerEntry);
+            localStorage.setItem("prayers", JSON.stringify(prayers));
+
+            displayPrayers();
+            document.getElementById("name").value = "";
+            document.getElementById("prayerInput").value = "";
+        }
+
+        function displayPrayers() {
+            const prayerList = document.getElementById("prayer-list");
+            prayerList.innerHTML = "";
+            const prayers = JSON.parse(localStorage.getItem("prayers")) || [];
+
+            prayers.forEach(prayer => {
+                const prayerItem = document.createElement("div");
+                prayerItem.classList.add("prayer-item");
+                prayerItem.innerHTML = `
+                    <strong>${prayer.name}</strong>
+                    <p>${prayer.prayer}</p>
+                    <small>${prayer.date} at ${prayer.time}</small>
+                `;
+                prayerList.appendChild(prayerItem);
+            });
+        }
+
+        window.onload = function () {
+            displayDate();
+            generateVerse();
+            displayPrayers();
+        };
+    </script>
 </body>
 </html>
