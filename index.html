@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bible App with API</title>
+<title>Bible App with Relevant Verses & Fixed Image List</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
   body {
@@ -179,6 +179,7 @@
 </div>
 
 <script>
+  // Bible books and chapters counts for realistic fetching
   const bibleBooks = [
     "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
     "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
@@ -199,37 +200,121 @@
   const bookChapters = {
     "Genesis": 50,
     "Exodus": 40,
+    "Leviticus": 27,
+    "Numbers": 36,
+    "Deuteronomy": 34,
+    "Joshua": 24,
+    "Judges": 21,
+    "Ruth": 4,
+    "1 Samuel": 31,
+    "2 Samuel": 24,
+    "1 Kings": 22,
+    "2 Kings": 25,
+    "1 Chronicles": 29,
+    "2 Chronicles": 36,
+    "Ezra": 10,
+    "Nehemiah": 13,
+    "Esther": 10,
+    "Job": 42,
     "Psalms": 150,
-    "John": 21,
-    "Romans": 16,
+    "Proverbs": 31,
+    "Ecclesiastes": 12,
+    "Song of Solomon": 8,
+    "Isaiah": 66,
+    "Jeremiah": 52,
+    "Lamentations": 5,
+    "Ezekiel": 48,
+    "Daniel": 12,
+    "Hosea": 14,
+    "Joel": 3,
+    "Amos": 9,
+    "Obadiah": 1,
+    "Jonah": 4,
+    "Micah": 7,
+    "Nahum": 3,
+    "Habakkuk": 3,
+    "Zephaniah": 3,
+    "Haggai": 2,
+    "Zechariah": 14,
+    "Malachi": 4,
     "Matthew": 28,
+    "Mark": 16,
     "Luke": 24,
-    "Revelation": 22,
+    "John": 21,
+    "Acts": 28,
+    "Romans": 16,
+    "1 Corinthians": 16,
+    "2 Corinthians": 13,
+    "Galatians": 6,
+    "Ephesians": 6,
+    "Philippians": 4,
+    "Colossians": 4,
+    "1 Thessalonians": 5,
+    "2 Thessalonians": 3,
+    "1 Timothy": 6,
+    "2 Timothy": 4,
+    "Titus": 3,
+    "Philemon": 1,
+    "Hebrews": 13,
+    "James": 5,
+    "1 Peter": 5,
+    "2 Peter": 3,
+    "1 John": 5,
+    "2 John": 1,
+    "3 John": 1,
+    "Jude": 1,
+    "Revelation": 22
   };
+
+  // Array of fixed working Bible-related image URLs (Unsplash source)
+  const bibleImages = [
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80", // open bible
+    "https://images.unsplash.com/photo-1529655683826-aba9b3e77383?auto=format&fit=crop&w=600&q=80", // cross on sunset
+    "https://images.unsplash.com/photo-1519337265831-281ec6cc8514?auto=format&fit=crop&w=600&q=80", // church interior
+    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80", // praying hands
+    "https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=600&q=80", // light through stained glass
+    "https://images.unsplash.com/photo-1500051638674-ff996a0ec29e?auto=format&fit=crop&w=600&q=80", // bible and rosary
+    "https://images.unsplash.com/photo-1513628253939-010e64ac66cd?auto=format&fit=crop&w=600&q=80", // wooden cross on rock
+    "https://images.unsplash.com/photo-1543340713-8aa6a0de1aa9?auto=format&fit=crop&w=600&q=80", // candle light in church
+    "https://images.unsplash.com/photo-1476888114853-282de3e6d2d6?auto=format&fit=crop&w=600&q=80", // open bible pages
+    "https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=600&q=80", // church bell tower
+    "https://images.unsplash.com/photo-1514516872907-8c97009bf438?auto=format&fit=crop&w=600&q=80", // sunset with cross silhouette
+    "https://images.unsplash.com/photo-1534258946811-86a4f83049a1?auto=format&fit=crop&w=600&q=80"  // sunrise over church
+  ];
 
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  function getRandomBook() {
-    const idx = randInt(0, bibleBooks.length - 1);
-    return bibleBooks[idx];
-  }
+  // Pick a random image from fixed array with retry on error
+  function loadBibleImage() {
+    const img = document.getElementById('bible-image');
+    img.style.opacity = 0;
 
-  function getRandomChapter(book) {
-    if (bookChapters[book]) {
-      return randInt(1, bookChapters[book]);
+    function tryLoad() {
+      const url = bibleImages[randInt(0, bibleImages.length -1)];
+      img.src = url + "?random=" + Math.random();
+
+      img.onload = () => {
+        img.style.opacity = 1;
+      };
+
+      img.onerror = () => {
+        console.warn("Image failed to load, retrying...");
+        setTimeout(tryLoad, 500);
+      };
     }
-    return randInt(1, 30);
+    tryLoad();
   }
 
+  // Fetch a relevant verse based on random book and chapter
   async function fetchRandomVerse() {
     document.getElementById('verse').textContent = "Loading verse...";
     document.getElementById('prayer').textContent = "";
     loadBibleImage();
 
-    let book = getRandomBook();
-    let chapter = getRandomChapter(book);
+    let book = bibleBooks[randInt(0, bibleBooks.length - 1)];
+    let chapter = bookChapters[book] ? randInt(1, bookChapters[book]) : randInt(1, 30);
 
     try {
       const url = `https://bible-api.com/${encodeURIComponent(book)}%20${chapter}`;
@@ -239,6 +324,7 @@
 
       if (!data.verses || data.verses.length === 0) throw new Error("No verses found");
 
+      // Pick a random verse from the chapter
       const verseIndex = randInt(0, data.verses.length - 1);
       const verseObj = data.verses[verseIndex];
 
@@ -271,29 +357,6 @@
       default:
         return "Lord, hear my prayer and bless my soul. Amen.";
     }
-  }
-
-  // Load rotating Bible images from Unsplash with retry on failure
-  function loadBibleImage() {
-    const keywords = ["bible","faith","church","cross","scripture","prayer","holy","christ","worship","jesus"];
-    const img = document.getElementById('bible-image');
-    img.style.opacity = 0;
-
-    function tryLoadImage() {
-      const keyword = keywords[randInt(0, keywords.length - 1)];
-      img.src = `https://source.unsplash.com/600x400/?${keyword}&sig=${Math.random()}`;
-
-      img.onload = () => {
-        img.style.opacity = 1;
-      };
-
-      img.onerror = () => {
-        console.warn("Image failed, retrying with new keyword...");
-        setTimeout(tryLoadImage, 500);
-      };
-    }
-
-    tryLoadImage();
   }
 
   function toggleMenu() {
