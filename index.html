@@ -8,25 +8,29 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
   body {
     font-family: 'Inter', sans-serif;
-    background: #f9fafb;
+    background: #0a0014; /* deep purple background */
     margin: 0;
     padding: 40px 20px;
     display: flex;
     justify-content: center;
+    color: #fff;
   }
   #container {
-    background: white;
+    background: #120024;
     max-width: 600px;
     width: 100%;
     padding: 30px 40px 40px;
     border-radius: 14px;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+    box-shadow: 0 0 25px rgba(190, 0, 255, 0.7), 0 0 50px rgba(190, 0, 255, 0.4);
     text-align: center;
     position: relative;
+    color: #fff;
   }
   h2 {
     font-weight: 600;
     margin-bottom: 12px;
+    color: #e0b3ff;
+    text-shadow: 0 0 8px #b400ff;
   }
   #menu {
     position: absolute;
@@ -35,31 +39,33 @@
     font-size: 28px;
     cursor: pointer;
     user-select: none;
-    color: #444;
+    color: #e0b3ff;
+    text-shadow: 0 0 6px #b400ff;
   }
   ul.menu-items {
     position: absolute;
     top: 60px;
     right: 24px;
-    background: white;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+    background: #1c0035;
+    box-shadow: 0 0 15px rgba(190, 0, 255, 0.6);
     border-radius: 10px;
     list-style: none;
     padding: 10px 0;
     margin: 0;
-    width: 160px;
+    width: 180px;
     display: none;
   }
   ul.menu-items li {
     padding: 10px 20px;
     cursor: pointer;
-    color: #222;
+    color: #fff;
   }
   ul.menu-items li:hover {
-    background-color: #f0f0f0;
+    background-color: #2a004f;
+    color: #e0b3ff;
   }
   #date {
-    color: #666;
+    color: #c5a3ff;
     margin-bottom: 20px;
     font-size: 14px;
   }
@@ -68,39 +74,34 @@
     font-size: 18px;
     margin-bottom: 14px;
     line-height: 1.5;
-    color: #111;
+    color: #fff;
+    text-shadow: 0 0 6px #9a00ff;
   }
   #prayer {
     font-style: italic;
     font-size: 16px;
-    color: #555;
+    color: #e0b3ff;
     margin-bottom: 20px;
   }
-  #bible-image {
-    width: 100%;
-    max-height: 280px;
-    object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 25px;
-  }
   button {
-    background-color: #2563eb;
+    background-color: #b400ff;
     color: white;
     border: none;
     padding: 12px 28px;
     font-size: 16px;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px #b400ff, 0 0 20px #8000ff;
   }
   button:hover {
-    background-color: #1d4ed8;
+    background-color: #d633ff;
+    box-shadow: 0 0 15px #d633ff, 0 0 30px #b400ff;
   }
   #prayerTab {
     margin-top: 40px;
   }
   #prayerTab h2 {
-    font-weight: 600;
     margin-bottom: 16px;
   }
   #name, #prayerInput {
@@ -109,10 +110,12 @@
     margin-bottom: 12px;
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #8000ff;
     font-size: 16px;
     font-family: 'Inter', sans-serif;
     box-sizing: border-box;
+    background: #1c0035;
+    color: #fff;
   }
   #prayerInput {
     height: 100px;
@@ -123,26 +126,26 @@
     text-align: left;
   }
   .prayer-item {
-    background: #f3f4f6;
+    background: #2a004f;
     border-radius: 10px;
     padding: 18px 20px;
     margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+    box-shadow: 0 0 10px rgba(190, 0, 255, 0.4);
     word-wrap: break-word;
   }
   .prayer-name {
     font-weight: 600;
     margin-bottom: 6px;
-    color: #111;
+    color: #e0b3ff;
   }
   .prayer-text {
     margin-bottom: 8px;
     white-space: pre-wrap;
-    color: #333;
+    color: #fff;
   }
   .prayer-time {
     font-size: 13px;
-    color: #777;
+    color: #c5a3ff;
   }
 </style>
 </head>
@@ -161,7 +164,6 @@
     <p id="date"></p>
     <p id="verse">Loading verse...</p>
     <p id="prayer"></p>
-    <img id="bible-image" src="media/img1.jpg" alt="Bible Image" />
     <button onclick="fetchRandomVerse()">Generate New Verse</button>
   </div>
 
@@ -174,8 +176,6 @@
     <div id="prayer-list"></div>
   </div>
 </div>
-
-<audio id="bg-music" src="media/music.mp3" loop></audio>
 
 <script>
   const verses = [
@@ -211,26 +211,15 @@
     { text: "Revelation 21:4", verse: "He will wipe away every tear from their eyes, and death shall be no more, neither shall there be mourning, nor crying, nor pain anymore, for the former things have passed away.", prayer: "God, I praise You for Your promise. Forgive my despair, comfort me, and I yield to Your hope. Amen." }
   ];
 
-  const images = [
-    "media/img1.jpg",
-    "media/img2.jpg",
-    "media/img3.jpg",
-    "media/img4.jpg",
-    "media/img5.jpg",
-    "media/img6.jpg",
-    "media/img7.jpg"
-  ];
-
   function randomInt(max) {
     return Math.floor(Math.random() * max);
   }
 
   function fetchRandomVerse() {
-  const verseObj = verses[randomInt(verses.length)];
-  document.getElementById('verse').textContent = `${verseObj.text} — ${verseObj.verse}`;
-  document.getElementById('prayer').textContent = verseObj.prayer;
-  document.getElementById('bible-image').src = images[randomInt(images.length)];
-}
+    const verseObj = verses[randomInt(verses.length)];
+    document.getElementById('verse').textContent = `${verseObj.text} — ${verseObj.verse}`;
+    document.getElementById('prayer').textContent = verseObj.prayer;
+  }
 
   function toggleMenu() {
     const menu = document.getElementById('menu-items');
@@ -303,11 +292,6 @@
     displayDate();
     fetchRandomVerse();
     displayPrayers();
-
-    const music = document.getElementById('bg-music');
-    document.body.addEventListener('click', () => {
-      music.play().catch(() => {});
-    }, { once: true });
   };
 </script>
 </body>
