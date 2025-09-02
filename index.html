@@ -6,32 +6,36 @@
 <title>Bible App</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
   body {
     font-family: 'Inter', sans-serif;
-    background: #000014; /* deep navy background */
+    background: #001024; 
     margin: 0;
     padding: 40px 20px;
     display: flex;
     justify-content: center;
-    color: #00f0ff;
+    color: #fff;
   }
+
   #container {
-    background: #001022;
+    background: #001b40;
     max-width: 600px;
     width: 100%;
     padding: 30px 40px 40px;
     border-radius: 14px;
-    box-shadow: 0 0 25px #00f0ff, 0 0 50px #00bfff;
+    box-shadow: 0 0 25px #00f0ff, 0 0 50px rgba(0, 255, 255, 0.4);
     text-align: center;
     position: relative;
-    color: #00f0ff;
+    color: #fff;
   }
+
   h2 {
     font-weight: 600;
     margin-bottom: 12px;
     color: #00f0ff;
-    text-shadow: 0 0 8px #00bfff;
+    text-shadow: 0 0 8px #00d4ff;
   }
+
   #menu {
     position: absolute;
     top: 24px;
@@ -40,14 +44,15 @@
     cursor: pointer;
     user-select: none;
     color: #00f0ff;
-    text-shadow: 0 0 6px #00bfff;
+    text-shadow: 0 0 6px #00d4ff;
   }
+
   ul.menu-items {
     position: absolute;
     top: 60px;
     right: 24px;
-    background: #002044;
-    box-shadow: 0 0 15px #00bfff;
+    background: #002040;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
     border-radius: 10px;
     list-style: none;
     padding: 10px 0;
@@ -55,34 +60,41 @@
     width: 180px;
     display: none;
   }
+
   ul.menu-items li {
     padding: 10px 20px;
     cursor: pointer;
+    color: #fff;
+  }
+
+  ul.menu-items li:hover {
+    background-color: #003060;
     color: #00f0ff;
   }
-  ul.menu-items li:hover {
-    background-color: #003366;
-    color: #00bfff;
-  }
+
   #date {
-    color: #00dfff;
+    color: #80e0ff;
     margin-bottom: 20px;
     font-size: 14px;
   }
+
   #verse {
     font-weight: 400;
     font-size: 18px;
     margin-bottom: 14px;
     line-height: 1.5;
-    color: #00f0ff;
+    color: #fff;
     text-shadow: 0 0 6px #00bfff;
   }
+
   #prayer {
     font-style: italic;
     font-size: 16px;
-    color: #00bfff;
+    color: #00d4ff;
     margin-bottom: 20px;
+    text-shadow: 0 0 4px #00bfff;
   }
+
   button {
     background-color: #00bfff;
     color: white;
@@ -92,18 +104,22 @@
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 0 10px #00bfff, 0 0 20px #00f0ff;
+    box-shadow: 0 0 10px #00bfff, 0 0 20px #00d4ff;
   }
+
   button:hover {
-    background-color: #00f0ff;
-    box-shadow: 0 0 15px #00f0ff, 0 0 30px #00bfff;
+    background-color: #00e0ff;
+    box-shadow: 0 0 15px #00e0ff, 0 0 30px #00bfff;
   }
+
   #prayerTab {
     margin-top: 40px;
   }
+
   #prayerTab h2 {
     margin-bottom: 16px;
   }
+
   #name, #prayerInput {
     width: 100%;
     max-width: 100%;
@@ -114,38 +130,44 @@
     font-size: 16px;
     font-family: 'Inter', sans-serif;
     box-sizing: border-box;
-    background: #002044;
-    color: #00f0ff;
+    background: #002040;
+    color: #fff;
   }
+
   #prayerInput {
     height: 100px;
     resize: vertical;
   }
+
   #prayer-list {
     margin-top: 30px;
     text-align: left;
   }
+
   .prayer-item {
-    background: #003366;
+    background: #003060;
     border-radius: 10px;
     padding: 18px 20px;
     margin-bottom: 16px;
-    box-shadow: 0 0 10px #00bfff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
     word-wrap: break-word;
   }
+
   .prayer-name {
     font-weight: 600;
     margin-bottom: 6px;
-    color: #00bfff;
+    color: #00f0ff;
   }
+
   .prayer-text {
     margin-bottom: 8px;
     white-space: pre-wrap;
-    color: #00f0ff;
+    color: #fff;
   }
+
   .prayer-time {
     font-size: 13px;
-    color: #00dfff;
+    color: #80e0ff;
   }
 </style>
 </head>
@@ -179,45 +201,43 @@
 
 <script>
 const verses = [
-  { text: "John 3:16", verse: "For God so loved the world, that He gave His only Son, that whoever believes in Him should not perish but have eternal life.", prayer: "Lord, I thank You for Your infinite love. Help me to trust in You daily and share Your love with others. Amen." },
-  { text: "Philippians 4:13", verse: "I can do all things through Him who strengthens me.", prayer: "Father, empower me with Your strength. When I am weak, remind me that You are my source. Amen." },
-  { text: "Psalm 23:1", verse: "The Lord is my shepherd; I shall not want.", prayer: "Lord, guide me and provide for me. Help me to rest in Your care and follow Your lead. Amen." },
-  { text: "Romans 8:28", verse: "And we know that for those who love God all things work together for good, for those who are called according to His purpose.", prayer: "God, grant me patience to trust Your plan and faith to see Your goodness in all things. Amen." },
-  { text: "Proverbs 3:5", verse: "Trust in the Lord with all your heart, and do not lean on your own understanding.", prayer: "Lord, teach me to trust You fully and not rely on my own understanding. Lead me in Your wisdom. Amen." },
-  { text: "Matthew 6:33", verse: "But seek first the kingdom of God and His righteousness, and all these things will be added to you.", prayer: "Father, help me seek You above all. May Your kingdom come in my heart and life. Amen." },
-  { text: "Jeremiah 29:11", verse: "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.", prayer: "God, remind me of Your good plans for my life. Strengthen my hope and trust in You. Amen." },
-  { text: "Isaiah 40:31", verse: "But they who wait for the Lord shall renew their strength; they shall mount up with wings like eagles; they shall run and not be weary; they shall walk and not faint.", prayer: "Lord, renew my strength and sustain me in every challenge. May I soar in Your power. Amen." },
-  { text: "Psalm 46:10", verse: "Be still, and know that I am God. I will be exalted among the nations, I will be exalted in the earth!", prayer: "Father, help me to be still and trust Your sovereignty. Calm my heart and mind. Amen." },
-  { text: "Romans 12:2", verse: "Do not be conformed to this world, but be transformed by the renewal of your mind, that by testing you may discern what is the will of God, what is good and acceptable and perfect.", prayer: "Lord, transform my mind to align with Your will. Teach me discernment and purity. Amen." },
-  { text: "Ephesians 2:8", verse: "For by grace you have been saved through faith. And this is not your own doing; it is the gift of God.", prayer: "Thank You, Lord, for saving me by Your grace. Help me to live in gratitude and faith. Amen." },
-  { text: "2 Corinthians 5:7", verse: "For we walk by faith, not by sight.", prayer: "Lord, strengthen my faith to trust You even when I cannot see the outcome. Amen." },
-  { text: "Psalm 91:1", verse: "He who dwells in the shelter of the Most High will abide in the shadow of the Almighty.", prayer: "God, protect me under Your wings. Let Your presence be my refuge and shield. Amen." },
-  { text: "Matthew 11:28", verse: "Come to me, all who labor and are heavy laden, and I will give you rest.", prayer: "Jesus, I bring my burdens to You. Grant me rest and peace in Your loving arms. Amen." },
-  { text: "Hebrews 11:1", verse: "Now faith is the assurance of things hoped for, the conviction of things not seen.", prayer: "Lord, strengthen my faith and help me trust Your promises even when unseen. Amen." },
-  { text: "James 1:5", verse: "If any of you lacks wisdom, let him ask God, who gives generously to all without reproach, and it will be given him.", prayer: "Father, grant me wisdom in decisions. Teach me to rely on Your guidance. Amen." },
-  { text: "1 Peter 5:7", verse: "Casting all your anxieties on Him, because He cares for you.", prayer: "Lord, I give You my worries. Help me rest in Your care and trust Your provision. Amen." },
-  { text: "Matthew 5:16", verse: "In the same way, let your light shine before others, so that they may see your good works and give glory to your Father who is in heaven.", prayer: "God, help me shine Your light and reflect Your love to everyone around me. Amen." },
-  { text: "Psalm 37:4", verse: "Delight yourself in the Lord, and He will give you the desires of your heart.", prayer: "Lord, fill my heart with delight in You. Align my desires with Your will. Amen." },
-  { text: "John 14:6", verse: "Jesus said to him, 'I am the way, and the truth, and the life. No one comes to the Father except through Me.'", prayer: "Jesus, guide me in Your way, truth, and life. May I always follow You. Amen." },
-  { text: "Colossians 3:23", verse: "Whatever you do, work heartily, as for the Lord and not for men.", prayer: "Lord, help me serve wholeheartedly in all I do for Your glory. Amen." },
-  { text: "Isaiah 41:10", verse: "Fear not, for I am with you; be not dismayed, for I am your God; I will strengthen you, I will help you, I will uphold you with My righteous right hand.", prayer: "Father, remove my fear and strengthen me. May I walk confidently with You. Amen." },
-  { text: "Psalm 34:8", verse: "Oh, taste and see that the Lord is good! Blessed is the man who takes refuge in Him!", prayer: "Lord, open my eyes to Your goodness. Let me find refuge and joy in You. Amen." },
-  { text: "Romans 5:8", verse: "But God shows His love for us in that while we were still sinners, Christ died for us.", prayer: "Jesus, thank You for loving me even when I was unworthy. Help me follow You faithfully. Amen." },
-  { text: "Galatians 2:20", verse: "I have been crucified with Christ. It is no longer I who live, but Christ who lives in me.", prayer: "Lord, help me live for You and let Christ shine through me in every action. Amen." },
-  { text: "Psalm 119:105", verse: "Your word is a lamp to my feet and a light to my path.", prayer: "Father, guide me with Your Word and illuminate my path. Keep me close to You. Amen." },
-  { text: "Matthew 28:19", verse: "Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.", prayer: "Jesus, empower me to share Your gospel and make disciples with courage and love. Amen." },
-  { text: "2 Timothy 1:7", verse: "For God gave us a spirit not of fear but of power and love and self-control.", prayer: "Lord, fill me with power, love, and self-control. Cast out fear from my life. Amen." },
-  { text: "Psalm 100:4", verse: "Enter His gates with thanksgiving, and His courts with praise! Give thanks to Him; bless His name!", prayer: "God, I come with thanksgiving and praise. Let my heart overflow with gratitude. Amen." },
-  { text: "Revelation 21:4", verse: "He will wipe away every tear from their eyes, and death shall be no more, neither shall there be mourning, nor crying, nor pain anymore.", prayer: "Father, comfort the brokenhearted and grant hope and eternal peace through Your Son. Amen." }
+  { text: "John 3:16", verse: "For God so loved the world, that He gave His only Son, that whoever believes in Him should not perish but have eternal life.", prayer: "Lord, I praise You for Your boundless love. Amen." },
+  { text: "Philippians 4:13", verse: "I can do all things through Him who strengthens me.", prayer: "Father, I thank You for strength. Amen." },
+  { text: "Psalm 23:1", verse: "The Lord is my shepherd; I shall not want.", prayer: "Lord, I rest in Your care. Amen." },
+  { text: "Romans 8:28", verse: "And we know that for those who love God all things work together for good.", prayer: "God, guide my life for good. Amen." },
+  { text: "Proverbs 3:5", verse: "Trust in the Lord with all your heart, and do not lean on your own understanding.", prayer: "Lord, help me trust You. Amen." },
+  { text: "Matthew 6:33", verse: "But seek first the kingdom of God and His righteousness, and all these things will be added to you.", prayer: "Father, help me seek You first. Amen." },
+  { text: "Jeremiah 29:11", verse: "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil.", prayer: "God, guide my future. Amen." },
+  { text: "Isaiah 40:31", verse: "But they who wait for the Lord shall renew their strength.", prayer: "Lord, renew me with Your strength. Amen." },
+  { text: "Psalm 46:10", verse: "Be still, and know that I am God.", prayer: "Father, help me be still. Amen." },
+  { text: "Romans 12:2", verse: "Do not be conformed to this world, but be transformed by the renewal of your mind.", prayer: "Lord, renew my mind. Amen." },
+  { text: "Ephesians 2:8", verse: "For by grace you have been saved through faith. And this is not your own doing; it is the gift of God.", prayer: "Lord, thank You for Your grace. Amen." },
+  { text: "2 Corinthians 5:7", verse: "For we walk by faith, not by sight.", prayer: "God, help me walk by faith. Amen." },
+  { text: "Psalm 91:1", verse: "He who dwells in the shelter of the Most High will abide in the shadow of the Almighty.", prayer: "Lord, protect me. Amen." },
+  { text: "Matthew 11:28", verse: "Come to me, all who labor and are heavy laden, and I will give you rest.", prayer: "Jesus, give me rest. Amen." },
+  { text: "Hebrews 11:1", verse: "Now faith is the assurance of things hoped for, the conviction of things not seen.", prayer: "Lord, strengthen my faith. Amen." },
+  { text: "James 1:5", verse: "If any of you lacks wisdom, let him ask God, who gives generously to all without reproach.", prayer: "Lord, grant me wisdom. Amen." },
+  { text: "1 Peter 5:7", verse: "Casting all your anxieties on Him, because He cares for you.", prayer: "Lord, I give You my worries. Amen." },
+  { text: "Matthew 5:16", verse: "Let your light shine before others, so that they may see your good works.", prayer: "Lord, help me shine for You. Amen." },
+  { text: "Psalm 37:4", verse: "Delight yourself in the Lord, and He will give you the desires of your heart.", prayer: "Lord, align my desires with Yours. Amen." },
+  { text: "John 14:6", verse: "Jesus said, 'I am the way, and the truth, and the life. No one comes to the Father except through Me.'", prayer: "Jesus, guide me. Amen." },
+  { text: "Colossians 3:23", verse: "Whatever you do, work heartily, as for the Lord and not for men.", prayer: "Lord, help me work for You. Amen." },
+  { text: "Isaiah 41:10", verse: "Fear not, for I am with you; be not dismayed, for I am your God.", prayer: "Lord, remove my fear. Amen." },
+  { text: "Psalm 34:8", verse: "Oh, taste and see that the Lord is good! Blessed is the man who takes refuge in Him!", prayer: "Lord, thank You for Your goodness. Amen." },
+  { text: "Romans 5:8", verse: "But God shows His love for us in that while we were still sinners, Christ died for us.", prayer: "Jesus, thank You for Your love. Amen." },
+  { text: "Galatians 2:20", verse: "I have been crucified with Christ. It is no longer I who live, but Christ who lives in me.", prayer: "Lord, live in me. Amen." },
+  { text: "Psalm 119:105", verse: "Your word is a lamp to my feet and a light to my path.", prayer: "Lord, guide me by Your Word. Amen." },
+  { text: "Matthew 28:19", verse: "Go and make disciples of all nations.", prayer: "Jesus, use me for Your mission. Amen." },
+  { text: "2 Timothy 1:7", verse: "For God gave us a spirit not of fear but of power and love and self-control.", prayer: "Lord, fill me with courage. Amen." },
+  { text: "Psalm 100:4", verse: "Enter His gates with thanksgiving, and His courts with praise!", prayer: "Lord, I worship You with gratitude. Amen." },
+  { text: "Revelation 21:4", verse: "He will wipe away every tear from their eyes; and death shall be no more.", prayer: "Lord, comfort me. Amen." }
 ];
 
-function randomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+function randomInt(max) { return Math.floor(Math.random() * max); }
 
 function fetchRandomVerse() {
   const verseObj = verses[randomInt(verses.length)];
-  document.getElementById('verse').textContent = ${verseObj.text} — ${verseObj.verse};
+  document.getElementById('verse').textContent = `${verseObj.text} — ${verseObj.verse}`;
   document.getElementById('prayer').textContent = verseObj.prayer;
 }
 
@@ -247,17 +267,13 @@ function displayDate() {
 function submitPrayer() {
   const nameInput = document.getElementById('name').value.trim();
   const prayerInput = document.getElementById('prayerInput').value.trim();
-  if (!prayerInput) {
-    alert("Please enter your prayer before submitting.");
-    return;
-  }
+  if (!prayerInput) { alert("Please enter your prayer before submitting."); return; }
   const name = nameInput || "Anonymous";
   const now = new Date();
   const dateOptions = { year:'numeric', month:'long', day:'numeric' };
   const timeOptions = { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true };
   const date = now.toLocaleDateString('en-US', dateOptions);
   const time = now.toLocaleTimeString('en-US', timeOptions);
-
   const newPrayer = { name, prayer: prayerInput, date, time };
   let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
   prayers.unshift(newPrayer);
@@ -274,11 +290,9 @@ function displayPrayers() {
   prayers.forEach(p => {
     const div = document.createElement('div');
     div.className = 'prayer-item';
-    div.innerHTML = 
-      <div class="prayer-name">${escapeHtml(p.name)}</div>
-      <div class="prayer-text">${escapeHtml(p.prayer)}</div>
-      <div class="prayer-time">${p.date} at ${p.time}</div>
-    ;
+    div.innerHTML = `<div class="prayer-name">${escapeHtml(p.name)}</div>
+                     <div class="prayer-text">${escapeHtml(p.prayer)}</div>
+                     <div class="prayer-time">${p.date} at ${p.time}</div>`;
     list.appendChild(div);
   });
 }
@@ -288,11 +302,7 @@ function escapeHtml(text) {
   return text.replace(/[&<>"']/g, m => map[m]);
 }
 
-window.onload = () => {
-  displayDate();
-  fetchRandomVerse();
-  displayPrayers();
-};
+window.onload = () => { displayDate(); fetchRandomVerse(); displayPrayers(); };
 </script>
 </body>
 </html>
