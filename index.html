@@ -1,308 +1,1175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bible App</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Bible Verse & Prayer Wall</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #001024; 
-    margin: 0;
-    padding: 40px 20px;
-    display: flex;
-    justify-content: center;
-    color: #fff;
-  }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  #container {
-    background: #001b40;
-    max-width: 600px;
-    width: 100%;
-    padding: 30px 40px 40px;
-    border-radius: 14px;
-    box-shadow: 0 0 25px #00f0ff, 0 0 50px rgba(0, 255, 255, 0.4);
-    text-align: center;
-    position: relative;
-    color: #fff;
-  }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0c0e15;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-  h2 {
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: #00f0ff;
-    text-shadow: 0 0 8px #00d4ff;
-  }
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(12, 14, 21, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-  #menu {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    font-size: 28px;
-    cursor: pointer;
-    user-select: none;
-    color: #00f0ff;
-    text-shadow: 0 0 6px #00d4ff;
-  }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+        }
 
-  ul.menu-items {
-    position: absolute;
-    top: 60px;
-    right: 24px;
-    background: #002040;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
-    border-radius: 10px;
-    list-style: none;
-    padding: 10px 0;
-    margin: 0;
-    width: 180px;
-    display: none;
-  }
+        .nav-logo span {
+            font-size: 1.5rem;
+        }
 
-  ul.menu-items li {
-    padding: 10px 20px;
-    cursor: pointer;
-    color: #fff;
-  }
+        .hamburger {
+            width: 30px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1001;
+        }
 
-  ul.menu-items li:hover {
-    background-color: #003060;
-    color: #00f0ff;
-  }
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
 
-  #date {
-    color: #80e0ff;
-    margin-bottom: 20px;
-    font-size: 14px;
-  }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
 
-  #verse {
-    font-weight: 400;
-    font-size: 18px;
-    margin-bottom: 14px;
-    line-height: 1.5;
-    color: #fff;
-    text-shadow: 0 0 6px #00bfff;
-  }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
 
-  #prayer {
-    font-style: italic;
-    font-size: 16px;
-    color: #00d4ff;
-    margin-bottom: 20px;
-    text-shadow: 0 0 4px #00bfff;
-  }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
 
-  button {
-    background-color: #00bfff;
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 0 10px #00bfff, 0 0 20px #00d4ff;
-  }
+        /* Side Menu */
+        .side-menu {
+            position: fixed;
+            top: 70px;
+            right: -350px;
+            width: 350px;
+            height: calc(100vh - 70px);
+            background: rgba(20, 23, 34, 0.98);
+            backdrop-filter: blur(20px);
+            transition: right 0.4s ease;
+            z-index: 999;
+            padding: 2rem;
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-  button:hover {
-    background-color: #00e0ff;
-    box-shadow: 0 0 15px #00e0ff, 0 0 30px #00bfff;
-  }
+        .side-menu.active {
+            right: 0;
+        }
 
-  #prayerTab {
-    margin-top: 40px;
-  }
+        .menu-overlay {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 998;
+        }
 
-  #prayerTab h2 {
-    margin-bottom: 16px;
-  }
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
 
-  #name, #prayerInput {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 12px;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #00bfff;
-    font-size: 16px;
-    font-family: 'Inter', sans-serif;
-    box-sizing: border-box;
-    background: #002040;
-    color: #fff;
-  }
+        .menu-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #8892b0;
+            margin-bottom: 1.5rem;
+        }
 
-  #prayerInput {
-    height: 100px;
-    resize: vertical;
-  }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
 
-  #prayer-list {
-    margin-top: 30px;
-    text-align: left;
-  }
+        .menu-item:hover,
+        .menu-item.active {
+            background: rgba(102, 126, 234, 0.15);
+        }
 
-  .prayer-item {
-    background: #003060;
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
-    word-wrap: break-word;
-  }
+        .menu-item.active {
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
 
-  .prayer-name {
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #00f0ff;
-  }
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
 
-  .prayer-text {
-    margin-bottom: 8px;
-    white-space: pre-wrap;
-    color: #fff;
-  }
+        .menu-item.active .menu-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
 
-  .prayer-time {
-    font-size: 13px;
-    color: #80e0ff;
-  }
-</style>
+        .menu-text h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .menu-text p {
+            font-size: 0.8rem;
+            color: #8892b0;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 70px;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 50vh;
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1f3e 0%, #2d3561 50%, #1a1f3e 100%);
+            filter: brightness(0.9);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #a8b2d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: #8892b0;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: #8892b0;
+        }
+
+        /* Featured Verse Card */
+        .featured-verse {
+            background: linear-gradient(145deg, #1a1f2e 0%, #151922 100%);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .verse-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .verse-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .verse-date {
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+
+        .verse-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-style: italic;
+            line-height: 1.6;
+            color: #ccd6f6;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 2rem;
+            border-left: 3px solid #667eea;
+        }
+
+        .verse-reference {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .verse-reference::before {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.5));
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #a8b2d1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Prayer Wall */
+        .prayer-wall {
+            display: none;
+        }
+
+        .prayer-wall.active {
+            display: block;
+        }
+
+        .prayer-form {
+            background: linear-gradient(145deg, #1a1f2e 0%, #151922 100%);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #a8b2d1;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Prayer Cards */
+        .prayer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .prayer-card {
+            background: linear-gradient(145deg, #1a1f2e 0%, #151922 100%);
+            border-radius: 20px;
+            padding: 1.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prayer-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .prayer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .prayer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .prayer-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .author-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info span {
+            font-size: 0.8rem;
+            color: #8892b0;
+        }
+
+        .prayer-category {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .prayer-text {
+            color: #ccd6f6;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+
+        .prayer-actions {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .prayer-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #8892b0;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .prayer-action:hover {
+            color: #667eea;
+        }
+
+        .prayer-action.prayed {
+            color: #667eea;
+        }
+
+        .prayer-action.prayed span:first-child {
+            animation: prayAnimation 0.5s ease;
+        }
+
+        @keyframes prayAnimation {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #8892b0;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #ccd6f6;
+        }
+
+        /* Categories Grid */
+        .categories {
+            margin-top: 4rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: #a8b2d1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: linear-gradient(145deg, #1a1f2e 0%, #151922 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .category-image {
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .category-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(transparent, #1a1f2e);
+        }
+
+        .category-content {
+            padding: 1.5rem;
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-card:nth-child(1) .category-icon { background: rgba(102, 126, 234, 0.2); }
+        .category-card:nth-child(2) .category-icon { background: rgba(118, 75, 162, 0.2); }
+        .category-card:nth-child(3) .category-icon { background: rgba(240, 147, 251, 0.2); }
+        .category-card:nth-child(4) .category-icon { background: rgba(79, 172, 254, 0.2); }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .category-desc {
+            font-size: 0.9rem;
+            color: #8892b0;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #8892b0;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-bar {
+                padding: 0 1.5rem;
+            }
+
+            .side-menu {
+                width: 100%;
+                right: -100%;
+            }
+
+            .hero {
+                height: 40vh;
+            }
+
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            .featured-verse {
+                padding: 2rem;
+            }
+
+            .verse-text {
+                padding-left: 1rem;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .prayer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .featured-verse,
+        .prayer-form,
+        .prayer-card {
+            animation: fadeIn 0.6s ease;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: #8892b0;
+            padding: 3rem;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: pulse 1.4s infinite;
+        }
+
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-logo">
+            <span>✝️</span>
+            <span id="pageTitle">Daily Verse</span>
+        </div>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
 
-<div id="container">
-  <div id="menu" onclick="toggleMenu()">☰</div>
-  <ul class="menu-items" id="menu-items">
-    <li onclick="showVerseTab()">Verse of the Day</li>
-    <li onclick="showPrayerTab()">Prayer Wall</li>
-  </ul>
+    <!-- Side Menu -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-title">Navigation</div>
+        <div class="menu-item active" id="menuVerse" onclick="showSection('verse')">
+            <div class="menu-icon">📖</div>
+            <div class="menu-text">
+                <h3>Daily Verse</h3>
+                <p>Get inspired by scripture</p>
+            </div>
+        </div>
+        <div class="menu-item" id="menuPrayer" onclick="showSection('prayer')">
+            <div class="menu-icon">🙏</div>
+            <div class="menu-text">
+                <h3>Prayer Wall</h3>
+                <p>Share and pray together</p>
+            </div>
+        </div>
+    </div>
 
-  <!-- Verse of the Day Section -->
-  <div id="verseTab">
-    <h2>Verse of the Day</h2>
-    <p id="date"></p>
-    <p id="verse">Loading verse...</p>
-    <p id="prayer"></p>
-    <button onclick="fetchRandomVerse()">Generate New Verse</button>
-  </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Daily Verse Section -->
+        <div id="verseSection">
+            <header class="hero">
+                <div class="hero-bg"></div>
+                <div class="hero-content">
+                    <div class="hero-icon">✝️</div>
+                    <h1>Daily Verse</h1>
+                    <p>Find inspiration for every moment</p>
+                </div>
+            </header>
 
-  <!-- Prayer Wall Section -->
-  <div id="prayerTab" style="display:none;">
-    <h2>Prayer Wall</h2>
-    <input id="name" placeholder="Your Name (optional)" />
-    <textarea id="prayerInput" placeholder="Write your prayer here..."></textarea>
-    <button onclick="submitPrayer()">Submit Prayer</button>
-    <div id="prayer-list"></div>
-  </div>
-</div>
+            <div class="container">
+                <div class="featured-verse" id="featuredVerse">
+                    <div class="loading">
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                    </div>
+                </div>
 
-<script>
-const verses = [
-  { text: "John 3:16", verse: "For God so loved the world, that He gave His only Son, that whoever believes in Him should not perish but have eternal life.", prayer: "Lord, I praise You for Your boundless love. Amen." },
-  { text: "Philippians 4:13", verse: "I can do all things through Him who strengthens me.", prayer: "Father, I thank You for strength. Amen." },
-  { text: "Psalm 23:1", verse: "The Lord is my shepherd; I shall not want.", prayer: "Lord, I rest in Your care. Amen." },
-  { text: "Romans 8:28", verse: "And we know that for those who love God all things work together for good.", prayer: "God, guide my life for good. Amen." },
-  { text: "Proverbs 3:5", verse: "Trust in the Lord with all your heart, and do not lean on your own understanding.", prayer: "Lord, help me trust You. Amen." },
-  { text: "Matthew 6:33", verse: "But seek first the kingdom of God and His righteousness, and all these things will be added to you.", prayer: "Father, help me seek You first. Amen." },
-  { text: "Jeremiah 29:11", verse: "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil.", prayer: "God, guide my future. Amen." },
-  { text: "Isaiah 40:31", verse: "But they who wait for the Lord shall renew their strength.", prayer: "Lord, renew me with Your strength. Amen." },
-  { text: "Psalm 46:10", verse: "Be still, and know that I am God.", prayer: "Father, help me be still. Amen." },
-  { text: "Romans 12:2", verse: "Do not be conformed to this world, but be transformed by the renewal of your mind.", prayer: "Lord, renew my mind. Amen." },
-  { text: "Ephesians 2:8", verse: "For by grace you have been saved through faith. And this is not your own doing; it is the gift of God.", prayer: "Lord, thank You for Your grace. Amen." },
-  { text: "2 Corinthians 5:7", verse: "For we walk by faith, not by sight.", prayer: "God, help me walk by faith. Amen." },
-  { text: "Psalm 91:1", verse: "He who dwells in the shelter of the Most High will abide in the shadow of the Almighty.", prayer: "Lord, protect me. Amen." },
-  { text: "Matthew 11:28", verse: "Come to me, all who labor and are heavy laden, and I will give you rest.", prayer: "Jesus, give me rest. Amen." },
-  { text: "Hebrews 11:1", verse: "Now faith is the assurance of things hoped for, the conviction of things not seen.", prayer: "Lord, strengthen my faith. Amen." },
-  { text: "James 1:5", verse: "If any of you lacks wisdom, let him ask God, who gives generously to all without reproach.", prayer: "Lord, grant me wisdom. Amen." },
-  { text: "1 Peter 5:7", verse: "Casting all your anxieties on Him, because He cares for you.", prayer: "Lord, I give You my worries. Amen." },
-  { text: "Matthew 5:16", verse: "Let your light shine before others, so that they may see your good works.", prayer: "Lord, help me shine for You. Amen." },
-  { text: "Psalm 37:4", verse: "Delight yourself in the Lord, and He will give you the desires of your heart.", prayer: "Lord, align my desires with Yours. Amen." },
-  { text: "John 14:6", verse: "Jesus said, 'I am the way, and the truth, and the life. No one comes to the Father except through Me.'", prayer: "Jesus, guide me. Amen." },
-  { text: "Colossians 3:23", verse: "Whatever you do, work heartily, as for the Lord and not for men.", prayer: "Lord, help me work for You. Amen." },
-  { text: "Isaiah 41:10", verse: "Fear not, for I am with you; be not dismayed, for I am your God.", prayer: "Lord, remove my fear. Amen." },
-  { text: "Psalm 34:8", verse: "Oh, taste and see that the Lord is good! Blessed is the man who takes refuge in Him!", prayer: "Lord, thank You for Your goodness. Amen." },
-  { text: "Romans 5:8", verse: "But God shows His love for us in that while we were still sinners, Christ died for us.", prayer: "Jesus, thank You for Your love. Amen." },
-  { text: "Galatians 2:20", verse: "I have been crucified with Christ. It is no longer I who live, but Christ who lives in me.", prayer: "Lord, live in me. Amen." },
-  { text: "Psalm 119:105", verse: "Your word is a lamp to my feet and a light to my path.", prayer: "Lord, guide me by Your Word. Amen." },
-  { text: "Matthew 28:19", verse: "Go and make disciples of all nations.", prayer: "Jesus, use me for Your mission. Amen." },
-  { text: "2 Timothy 1:7", verse: "For God gave us a spirit not of fear but of power and love and self-control.", prayer: "Lord, fill me with courage. Amen." },
-  { text: "Psalm 100:4", verse: "Enter His gates with thanksgiving, and His courts with praise!", prayer: "Lord, I worship You with gratitude. Amen." },
-  { text: "Revelation 21:4", verse: "He will wipe away every tear from their eyes; and death shall be no more.", prayer: "Lord, comfort me. Amen." }
-];
+                <div class="categories">
+                    <h2 class="section-title">📚 Browse by Theme</h2>
+                    <div class="category-grid">
+                        <div class="category-card" onclick="loadCategory('hope')">
+                            <div class="category-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                            <div class="category-content">
+                                <div class="category-icon">🌅</div>
+                                <h3 class="category-title">Hope & Encouragement</h3>
+                                <p class="category-desc">Verses to lift your spirit during difficult times</p>
+                            </div>
+                        </div>
 
-function randomInt(max) { return Math.floor(Math.random() * max); }
+                        <div class="category-card" onclick="loadCategory('strength')">
+                            <div class="category-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                            <div class="category-content">
+                                <div class="category-icon">💪</div>
+                                <h3 class="category-title">Strength & Courage</h3>
+                                <p class="category-desc">Words of power for when you need to be brave</p>
+                            </div>
+                        </div>
 
-function fetchRandomVerse() {
-  const verseObj = verses[randomInt(verses.length)];
-  document.getElementById('verse').textContent = `${verseObj.text} — ${verseObj.verse}`;
-  document.getElementById('prayer').textContent = verseObj.prayer;
-}
+                        <div class="category-card" onclick="loadCategory('love')">
+                            <div class="category-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                            <div class="category-content">
+                                <div class="category-icon">❤️</div>
+                                <h3 class="category-title">Love & Relationships</h3>
+                                <p class="category-desc">Guidance for building meaningful connections</p>
+                            </div>
+                        </div>
 
-function toggleMenu() {
-  const menu = document.getElementById('menu-items');
-  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
+                        <div class="category-card" onclick="loadCategory('peace')">
+                            <div class="category-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                            <div class="category-content">
+                                <div class="category-icon">🕊️</div>
+                                <h3 class="category-title">Peace & Rest</h3>
+                                <p class="category-desc">Find calm and tranquility in God's promises</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-function showVerseTab() {
-  document.getElementById('verseTab').style.display = 'block';
-  document.getElementById('prayerTab').style.display = 'none';
-  document.getElementById('menu-items').style.display = 'none';
-}
+        <!-- Prayer Wall Section -->
+        <div id="prayerSection" class="prayer-wall">
+            <header class="hero">
+                <div class="hero-bg" style="background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #1e3a5f 100%);"></div>
+                <div class="hero-content">
+                    <div class="hero-icon">🙏</div>
+                    <h1>Prayer Wall</h1>
+                    <p>Share your prayers and pray for others</p>
+                </div>
+            </header>
 
-function showPrayerTab() {
-  document.getElementById('prayerTab').style.display = 'block';
-  document.getElementById('verseTab').style.display = 'none';
-  document.getElementById('menu-items').style.display = 'none';
-}
+            <div class="container">
+                <div class="section-header">
+                    <h2>Submit a Prayer Request</h2>
+                    <p>Let the community pray with you</p>
+                </div>
 
-function displayDate() {
-  const today = new Date();
-  const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-  document.getElementById('date').textContent = today.toLocaleDateString('en-US', options);
-}
+                <div class="prayer-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Your Name</label>
+                            <input type="text" id="prayerName" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <input type="text" id="prayerCategory" placeholder="e.g., Healing, Family, Thanks">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Prayer</label>
+                        <textarea id="prayerText" placeholder="Share your prayer request..."></textarea>
+                    </div>
+                    <button class="btn btn-primary" onclick="submitPrayer()">
+                        🙏 Submit Prayer
+                    </button>
+                </div>
 
-function submitPrayer() {
-  const nameInput = document.getElementById('name').value.trim();
-  const prayerInput = document.getElementById('prayerInput').value.trim();
-  if (!prayerInput) { alert("Please enter your prayer before submitting."); return; }
-  const name = nameInput || "Anonymous";
-  const now = new Date();
-  const dateOptions = { year:'numeric', month:'long', day:'numeric' };
-  const timeOptions = { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true };
-  const date = now.toLocaleDateString('en-US', dateOptions);
-  const time = now.toLocaleTimeString('en-US', timeOptions);
-  const newPrayer = { name, prayer: prayerInput, date, time };
-  let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
-  prayers.unshift(newPrayer);
-  localStorage.setItem('prayers', JSON.stringify(prayers));
-  displayPrayers();
-  document.getElementById('name').value = '';
-  document.getElementById('prayerInput').value = '';
-}
+                <div class="section-header">
+                    <h2>Community Prayers</h2>
+                    <p>Join others in prayer</p>
+                </div>
 
-function displayPrayers() {
-  const list = document.getElementById('prayer-list');
-  list.innerHTML = '';
-  let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
-  prayers.forEach(p => {
-    const div = document.createElement('div');
-    div.className = 'prayer-item';
-    div.innerHTML = `<div class="prayer-name">${escapeHtml(p.name)}</div>
-                     <div class="prayer-text">${escapeHtml(p.prayer)}</div>
-                     <div class="prayer-time">${p.date} at ${p.time}</div>`;
-    list.appendChild(div);
-  });
-}
+                <div class="prayer-grid" id="prayerGrid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
 
-function escapeHtml(text) {
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-  return text.replace(/[&<>"']/g, m => map[m]);
-}
+    <footer>
+        <p>Daily Bible Verses & Prayer Wall</p>
+    </footer>
 
-window.onload = () => { displayDate(); fetchRandomVerse(); displayPrayers(); };
-</script>
+    <script>
+        // Verse database
+        const verses = {
+            hope: [
+                { text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.", reference: "Jeremiah 29:11" },
+                { text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.", reference: "Isaiah 40:31" },
+                { text: "May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.", reference: "Romans 15:13" }
+            ],
+            strength: [
+                { text: "I can do all things through Christ who strengthens me.", reference: "Philippians 4:13" },
+                { text: "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.", reference: "Joshua 1:9" },
+                { text: "The Lord is my strength and my shield; my heart trusts in him, and he helps me.", reference: "Psalm 28:7" }
+            ],
+            love: [
+                { text: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.", reference: "John 3:16" },
+                { text: "Love is patient, love is kind. It does not envy, it does not boast, it is not proud.", reference: "1 Corinthians 13:4" },
+                { text: "And now these three remain: faith, hope and love. But the greatest of these is love.", reference: "1 Corinthians 13:13" }
+            ],
+            peace: [
+                { text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.", reference: "John 14:27" },
+                { text: "The Lord is my shepherd, I lack nothing. He makes me lie down in green pastures, he leads me beside quiet waters.", reference: "Psalm 23:1-2" },
+                { text: "Cast all your anxiety on him because he cares for you.", reference: "1 Peter 5:7" }
+            ]
+        };
+
+        let currentVerse = null;
+        let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
+
+        // Initialize with sample prayers if empty
+        if (prayers.length === 0) {
+            prayers = [
+                {
+                    id: 1,
+                    name: "Sarah M.",
+                    category: "Healing",
+                    text: "Please pray for my mother's recovery from surgery. She's been through so much and needs strength.",
+                    prayers: 12,
+                    date: new Date(Date.now() - 86400000).toISOString()
+                },
+                {
+                    id: 2,
+                    name: "David K.",
+                    category: "Family",
+                    text: "Praying for my son who is going through a difficult time. May he find his path and peace.",
+                    prayers: 8,
+                    date: new Date(Date.now() - 172800000).toISOString()
+                },
+                {
+                    id: 3,
+                    name: "Anonymous",
+                    category: "Thanks",
+                    text: "Thankful for this community and the blessings in my life. Grateful for every day.",
+                    prayers: 24,
+                    date: new Date(Date.now() - 259200000).toISOString()
+                }
+            ];
+            savePrayers();
+        }
+
+        function savePrayers() {
+            localStorage.setItem('prayers', JSON.stringify(prayers));
+        }
+
+        function toggleMenu() {
+            document.getElementById('hamburger').classList.toggle('active');
+            document.getElementById('sideMenu').classList.toggle('active');
+            document.getElementById('menuOverlay').classList.toggle('active');
+        }
+
+        function showSection(section) {
+            toggleMenu();
+            
+            if (section === 'verse') {
+                document.getElementById('verseSection').style.display = 'block';
+                document.getElementById('prayerSection').classList.remove('active');
+                document.getElementById('menuVerse').classList.add('active');
+                document.getElementById('menuPrayer').classList.remove('active');
+                document.getElementById('pageTitle').textContent = 'Daily Verse';
+            } else {
+                document.getElementById('verseSection').style.display = 'none';
+                document.getElementById('prayerSection').classList.add('active');
+                document.getElementById('menuVerse').classList.remove('active');
+                document.getElementById('menuPrayer').classList.add('active');
+                document.getElementById('pageTitle').textContent = 'Prayer Wall';
+                renderPrayers();
+            }
+        }
+
+        function getRandomVerse() {
+            const allVerses = Object.values(verses).flat();
+            return allVerses[Math.floor(Math.random() * allVerses.length)];
+        }
+
+        function displayVerse(verse, category = null) {
+            currentVerse = verse;
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+            
+            const html = `
+                <div class="verse-header">
+                    <span class="verse-badge">${category || 'Daily Verse'}</span>
+                    <span class="verse-date">${today}</span>
+                </div>
+                <blockquote class="verse-text">"${verse.text}"</blockquote>
+                <div class="verse-reference">
+                    <span>${verse.reference}</span>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="loadNewVerse()">
+                        🔄 New Verse
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyVerse()">
+                        📋 Copy
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('featuredVerse').innerHTML = html;
+        }
+
+        function loadNewVerse() {
+            document.getElementById('featuredVerse').innerHTML = `
+                <div class="loading">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+            `;
+            
+            setTimeout(() => displayVerse(getRandomVerse()), 300);
+        }
+
+        function loadCategory(category) {
+            const categoryVerses = verses[category];
+            const randomVerse = categoryVerses[Math.floor(Math.random() * categoryVerses.length)];
+            displayVerse(randomVerse, category.charAt(0).toUpperCase() + category.slice(1));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function copyVerse() {
+            if (!currentVerse) return;
+            const text = `"${currentVerse.text}" — ${currentVerse.reference}`;
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopySuccess();
+                }).catch(() => {
+                    // Fallback for insecure contexts
+                    fallbackCopy(text);
+                });
+            } else {
+                // Fallback for older browsers or insecure contexts
+                fallbackCopy(text);
+            }
+        }
+        
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCopySuccess();
+            } catch (err) {
+                console.error('Copy failed:', err);
+            }
+            
+            document.body.removeChild(textarea);
+        }
+        
+        function showCopySuccess() {
+            const btn = document.querySelector('.btn-secondary');
+            if (btn) {
+                const original = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                setTimeout(() => btn.innerHTML = original, 2000);
+            }
+        }
+
+        function shareVerse() {
+            if (!currentVerse) return;
+            const text = `"${currentVerse.text}" — ${currentVerse.reference}`;
+            if (navigator.share) {
+                navigator.share({ title: 'Daily Bible Verse', text: text });
+            } else {
+                copyVerse();
+            }
+        }
+
+        function submitPrayer() {
+            const name = document.getElementById('prayerName').value.trim() || 'Anonymous';
+            const category = document.getElementById('prayerCategory').value.trim() || 'General';
+            const text = document.getElementById('prayerText').value.trim();
+
+            if (!text) {
+                alert('Please enter your prayer');
+                return;
+            }
+
+            const prayer = {
+                id: Date.now(),
+                name: name,
+                category: category,
+                text: text,
+                prayers: 0,
+                date: new Date().toISOString()
+            };
+
+            prayers.unshift(prayer);
+            savePrayers();
+
+            // Clear form
+            document.getElementById('prayerName').value = '';
+            document.getElementById('prayerCategory').value = '';
+            document.getElementById('prayerText').value = '';
+
+            renderPrayers();
+
+            // Show success feedback
+            const btn = document.querySelector('.prayer-form .btn-primary');
+            const original = btn.innerHTML;
+            btn.innerHTML = '✓ Prayer Submitted!';
+            setTimeout(() => btn.innerHTML = original, 2000);
+        }
+
+        function prayFor(id) {
+            const prayer = prayers.find(p => p.id === id);
+            if (prayer) {
+                prayer.prayers++;
+                savePrayers();
+                renderPrayers();
+            }
+        }
+
+        function renderPrayers() {
+            const grid = document.getElementById('prayerGrid');
+            
+            if (prayers.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">🙏</div>
+                        <h3>No prayers yet</h3>
+                        <p>Be the first to share a prayer request</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = prayers.map(prayer => {
+                const date = new Date(prayer.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                return `
+                    <div class="prayer-card">
+                        <div class="prayer-header">
+                            <div class="prayer-author">
+                                <div class="author-avatar">${prayer.name.charAt(0).toUpperCase()}</div>
+                                <div class="author-info">
+                                    <h4>${prayer.name}</h4>
+                                    <span>${date}</span>
+                                </div>
+                            </div>
+                            <span class="prayer-category">${prayer.category}</span>
+                        </div>
+                        <div class="prayer-text">${prayer.text}</div>
+                        <div class="prayer-actions">
+                            <div class="prayer-action" onclick="prayFor(${prayer.id})">
+                                <span>🙏</span>
+                                <span>${prayer.prayers} praying</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        setTimeout(() => displayVerse(getRandomVerse()), 500);
+    </script>
 </body>
-</html>
+</html>%    
