@@ -228,16 +228,32 @@ async function fetchRandomVerse() {
   const chosenVerse = verses[randomInt(verses.length)];
   const liveText = await fetchVerseFromApi(chosenVerse.text);
   const statusEl = document.getElementById('status');
+  const verseText = liveText ? liveText : chosenVerse.verse;
+
+  document.getElementById('verse').textContent = `${chosenVerse.text} — ${verseText}`;
 
   if (liveText) {
-    document.getElementById('verse').textContent = `${chosenVerse.text} — ${liveText}`;
     statusEl.textContent = '';
   } else {
-    document.getElementById('verse').textContent = `${chosenVerse.text} — ${chosenVerse.verse}`;
     statusEl.textContent = 'Using static local text because the API was unavailable.';
   }
 
-  document.getElementById('prayer').textContent = chosenVerse.prayer;
+  document.getElementById('prayer').innerHTML = formatVersePrayer(chosenVerse.text, verseText);
+}
+
+function formatVersePrayer(reference, verseText) {
+  const refEsc = escapeHtml(reference || '');
+  const verseEsc = escapeHtml(verseText || '');
+
+  const templates = [
+    `Heavenly Father, we thank You for ${refEsc} — ${verseEsc} We praise Your holy name and trust in Your promises. Strengthen us to live this truth today. In Jesus' name, Amen.`,
+    `Lord God, as we reflect on ${refEsc} — ${verseEsc} fill our hearts with faith and courage to follow Your ways. Help us rely on Your wisdom and grace each moment. Amen.`,
+    `Gracious Father, ${verseEsc} (from ${refEsc}) reminds us of Your love and faithfulness. Guide our steps, forgive our shortcomings, and make us instruments of Your peace. Amen.`,
+    `O Lord, ${refEsc} teaches us that ${verseEsc} — may this word dwell richly in us. Give us the humility to obey, the patience to wait, and the joy of Your presence. Amen.`
+  ];
+
+  const chosen = templates[randomInt(templates.length)];
+  return `<div>${chosen}</div>`;
 }
 
 async function fetchVerseFromApi(reference) {
