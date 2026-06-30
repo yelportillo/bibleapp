@@ -123,6 +123,22 @@ button:hover {
   resize: vertical;
 }
 
+button {
+  background-color: #00bfff;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00bfff;
+  margin-bottom: 20px;
+}
+
+#prayer-list {
+  margin-top: 20px;
+}
+
 .prayer-item {
   background: #003060;
   border-radius: 10px;
@@ -282,14 +298,21 @@ function toggleMenu() {
   menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
+function hideMenu() {
+  const menu = document.getElementById('menu-items');
+  menu.style.display = 'none';
+}
+
 function showVerseTab() {
   document.getElementById('verseTab').style.display = 'block';
   document.getElementById('prayerTab').style.display = 'none';
+  hideMenu();
 }
 
 function showPrayerTab() {
   document.getElementById('verseTab').style.display = 'none';
   document.getElementById('prayerTab').style.display = 'block';
+  hideMenu();
 }
 
 function displayDate() {
@@ -356,6 +379,17 @@ window.onload = () => {
   displayDate();
   fetchRandomVerse();
   displayPrayers();
+
+  document.addEventListener('click', event => {
+    const menu = document.getElementById('menu-items');
+    const menuButton = document.getElementById('menu');
+    if (!menu || !menuButton) return;
+
+    const target = event.target;
+    if (menu.style.display === 'block' && !menu.contains(target) && target !== menuButton) {
+      menu.style.display = 'none';
+    }
+  });
 };
 </script>
 
