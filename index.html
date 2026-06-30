@@ -4,197 +4,184 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Bible App</title>
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #001024; 
-    margin: 0;
-    padding: 40px 20px;
-    display: flex;
-    justify-content: center;
-    color: #fff;
-  }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #001024;
+  margin: 0;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  color: #fff;
+}
 
-  #container {
-    background: #001b40;
-    max-width: 600px;
-    width: 100%;
-    padding: 30px 40px 40px;
-    border-radius: 14px;
-    box-shadow: 0 0 25px #00f0ff, 0 0 50px rgba(0, 255, 255, 0.4);
-    text-align: center;
-    position: relative;
-    color: #fff;
-  }
+#container {
+  background: #001b40;
+  max-width: 600px;
+  width: 100%;
+  padding: 30px 40px 40px;
+  border-radius: 14px;
+  box-shadow: 0 0 25px #00f0ff, 0 0 50px rgba(0, 255, 255, 0.4);
+  text-align: center;
+  position: relative;
+}
 
-  h2 {
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: #00f0ff;
-    text-shadow: 0 0 8px #00d4ff;
-  }
+h2 {
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #00f0ff;
+  text-shadow: 0 0 8px #00d4ff;
+}
 
-  #menu {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    font-size: 28px;
-    cursor: pointer;
-    user-select: none;
-    color: #00f0ff;
-    text-shadow: 0 0 6px #00d4ff;
-  }
+#menu {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-size: 28px;
+  cursor: pointer;
+  user-select: none;
+  color: #00f0ff;
+}
 
-  ul.menu-items {
-    position: absolute;
-    top: 60px;
-    right: 24px;
-    background: #002040;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
-    border-radius: 10px;
-    list-style: none;
-    padding: 10px 0;
-    margin: 0;
-    width: 180px;
-    display: none;
-  }
+ul.menu-items {
+  position: absolute;
+  top: 60px;
+  right: 24px;
+  background: #002040;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+  border-radius: 10px;
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+  width: 180px;
+  display: none;
+}
 
-  ul.menu-items li {
-    padding: 10px 20px;
-    cursor: pointer;
-    color: #fff;
-  }
+ul.menu-items li {
+  padding: 10px 20px;
+  cursor: pointer;
+}
 
-  ul.menu-items li:hover {
-    background-color: #003060;
-    color: #00f0ff;
-  }
+ul.menu-items li:hover {
+  background-color: #003060;
+  color: #00f0ff;
+}
 
-  #date {
-    color: #80e0ff;
-    margin-bottom: 20px;
-    font-size: 14px;
-  }
+#date {
+  color: #80e0ff;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
 
-  #verse {
-    font-weight: 400;
-    font-size: 18px;
-    margin-bottom: 14px;
-    line-height: 1.5;
-    color: #fff;
-    text-shadow: 0 0 6px #00bfff;
-  }
+#verse {
+  font-size: 18px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+  text-shadow: 0 0 6px #00bfff;
+}
 
-  #prayer {
-    font-style: italic;
-    font-size: 16px;
-    color: #00d4ff;
-    margin-bottom: 20px;
-    text-shadow: 0 0 4px #00bfff;
-  }
+#prayer {
+  font-style: italic;
+  font-size: 16px;
+  color: #00d4ff;
+  margin-bottom: 20px;
+}
 
-  button {
-    background-color: #00bfff;
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 0 10px #00bfff, 0 0 20px #00d4ff;
-  }
+button {
+  background-color: #00bfff;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00bfff;
+}
 
-  button:hover {
-    background-color: #00e0ff;
-    box-shadow: 0 0 15px #00e0ff, 0 0 30px #00bfff;
-  }
+button:hover {
+  background-color: #00e0ff;
+}
 
-  #prayerTab {
-    margin-top: 40px;
-  }
+#name, #prayerInput {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #00bfff;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+  background: #002040;
+  color: #fff;
+}
 
-  #prayerTab h2 {
-    margin-bottom: 16px;
-  }
+#prayerInput {
+  height: 100px;
+  resize: vertical;
+}
 
-  #name, #prayerInput {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 12px;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #00bfff;
-    font-size: 16px;
-    font-family: 'Inter', sans-serif;
-    box-sizing: border-box;
-    background: #002040;
-    color: #fff;
-  }
+.prayer-item {
+  background: #003060;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
 
-  #prayerInput {
-    height: 100px;
-    resize: vertical;
-  }
+.prayer-name {
+  font-weight: 600;
+  color: #00f0ff;
+}
 
-  #prayer-list {
-    margin-top: 30px;
-    text-align: left;
-  }
-
-  .prayer-item {
-    background: #003060;
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
-    word-wrap: break-word;
-  }
-
-  .prayer-name {
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #00f0ff;
-  }
-
-  .prayer-text {
-    margin-bottom: 8px;
-    white-space: pre-wrap;
-    color: #fff;
-  }
-
-  .prayer-time {
-    font-size: 13px;
-    color: #80e0ff;
-  }
+.prayer-time {
+  font-size: 13px;
+  color: #80e0ff;
+}
 </style>
 </head>
+
 <body>
 
 <div id="container">
   <div id="menu" onclick="toggleMenu()">☰</div>
+
   <ul class="menu-items" id="menu-items">
     <li onclick="showVerseTab()">Verse of the Day</li>
     <li onclick="showPrayerTab()">Prayer Wall</li>
   </ul>
 
-  <!-- Verse of the Day Section -->
+  <!-- Verse Tab -->
   <div id="verseTab">
     <h2>Verse of the Day</h2>
     <p id="date"></p>
-    <p id="verse">Loading verse...</p>
-    <p id="prayer"></p>
-    <button onclick="fetchRandomVerse()">Generate New Verse</button>
+      <p id="verse">Loading verse...</p>
+      <p id="prayer"></p>
+      <div style="margin-top:12px;">
+        <button onclick="fetchRandomVerse()">Generate New Verse</button>
+      </div>
+      <p id="status" style="margin-top:12px; font-size:14px; color:#80e0ff;"></p>
   </div>
 
-  <!-- Prayer Wall Section -->
+  <!-- Prayer Tab -->
   <div id="prayerTab" style="display:none;">
     <h2>Prayer Wall</h2>
-    <input id="name" placeholder="Your Name (optional)" />
-    <textarea id="prayerInput" placeholder="Write your prayer here..."></textarea>
+
+    <input
+      id="name"
+      placeholder="Your Name (optional)"
+      autocomplete="name"
+    />
+
+    <textarea
+      id="prayerInput"
+      placeholder="Write your prayer here..."
+      autocomplete="off"
+    ></textarea>
+
     <button onclick="submitPrayer()">Submit Prayer</button>
+
     <div id="prayer-list"></div>
   </div>
 </div>
@@ -233,12 +220,45 @@ const verses = [
   { text: "Revelation 21:4", verse: "He will wipe away every tear from their eyes; and death shall be no more.", prayer: "Lord, comfort me. Amen." }
 ];
 
-function randomInt(max) { return Math.floor(Math.random() * max); }
+function randomInt(max) {
+  return Math.floor(Math.random() * max);
+}
 
-function fetchRandomVerse() {
-  const verseObj = verses[randomInt(verses.length)];
-  document.getElementById('verse').textContent = `${verseObj.text} — ${verseObj.verse}`;
-  document.getElementById('prayer').textContent = verseObj.prayer;
+async function fetchRandomVerse() {
+  const chosenVerse = verses[randomInt(verses.length)];
+  const liveText = await fetchVerseFromApi(chosenVerse.text);
+  const statusEl = document.getElementById('status');
+
+  if (liveText) {
+    document.getElementById('verse').textContent = `${chosenVerse.text} — ${liveText}`;
+    statusEl.textContent = '';
+  } else {
+    document.getElementById('verse').textContent = `${chosenVerse.text} — ${chosenVerse.verse}`;
+    statusEl.textContent = 'Using static local text because the API was unavailable.';
+  }
+
+  document.getElementById('prayer').textContent = chosenVerse.prayer;
+}
+
+async function fetchVerseFromApi(reference) {
+  const url = `https://bible-api.com/${encodeURIComponent(reference)}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const json = await response.json();
+    if (!json.text) {
+      throw new Error('Missing verse text from API response.');
+    }
+
+    return json.text.trim();
+  } catch (error) {
+    console.error('Bible API fetch failed:', error);
+    return null;
+  }
 }
 
 function toggleMenu() {
@@ -249,60 +269,79 @@ function toggleMenu() {
 function showVerseTab() {
   document.getElementById('verseTab').style.display = 'block';
   document.getElementById('prayerTab').style.display = 'none';
-  document.getElementById('menu-items').style.display = 'none';
 }
 
 function showPrayerTab() {
-  document.getElementById('prayerTab').style.display = 'block';
   document.getElementById('verseTab').style.display = 'none';
-  document.getElementById('menu-items').style.display = 'none';
+  document.getElementById('prayerTab').style.display = 'block';
 }
 
 function displayDate() {
   const today = new Date();
-  const options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-  document.getElementById('date').textContent = today.toLocaleDateString('en-US', options);
+  document.getElementById('date').textContent =
+    today.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
 }
 
 function submitPrayer() {
-  const nameInput = document.getElementById('name').value.trim();
-  const prayerInput = document.getElementById('prayerInput').value.trim();
-  if (!prayerInput) { alert("Please enter your prayer before submitting."); return; }
-  const name = nameInput || "Anonymous";
+  const name = document.getElementById('name').value.trim() || "Anonymous";
+  const prayer = document.getElementById('prayerInput').value.trim();
+
+  if (!prayer) return alert("Please enter a prayer.");
+
   const now = new Date();
-  const dateOptions = { year:'numeric', month:'long', day:'numeric' };
-  const timeOptions = { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true };
-  const date = now.toLocaleDateString('en-US', dateOptions);
-  const time = now.toLocaleTimeString('en-US', timeOptions);
-  const newPrayer = { name, prayer: prayerInput, date, time };
+
+  const entry = {
+    name,
+    prayer,
+    date: now.toLocaleDateString(),
+    time: now.toLocaleTimeString()
+  };
+
   let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
-  prayers.unshift(newPrayer);
+  prayers.unshift(entry);
   localStorage.setItem('prayers', JSON.stringify(prayers));
-  displayPrayers();
+
   document.getElementById('name').value = '';
   document.getElementById('prayerInput').value = '';
+
+  displayPrayers();
 }
 
 function displayPrayers() {
   const list = document.getElementById('prayer-list');
   list.innerHTML = '';
+
   let prayers = JSON.parse(localStorage.getItem('prayers')) || [];
+
   prayers.forEach(p => {
     const div = document.createElement('div');
     div.className = 'prayer-item';
-    div.innerHTML = `<div class="prayer-name">${escapeHtml(p.name)}</div>
-                     <div class="prayer-text">${escapeHtml(p.prayer)}</div>
-                     <div class="prayer-time">${p.date} at ${p.time}</div>`;
+    div.innerHTML = `
+      <div class="prayer-name">${escapeHtml(p.name)}</div>
+      <div>${escapeHtml(p.prayer)}</div>
+      <div class="prayer-time">${p.date} at ${p.time}</div>
+    `;
     list.appendChild(div);
   });
 }
 
 function escapeHtml(text) {
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-  return text.replace(/[&<>"']/g, m => map[m]);
+  return text.replace(/[&<>"']/g, m =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])
+  );
 }
 
-window.onload = () => { displayDate(); fetchRandomVerse(); displayPrayers(); };
+window.onload = () => {
+  displayDate();
+  fetchRandomVerse();
+  displayPrayers();
+};
 </script>
+
 </body>
 </html>
